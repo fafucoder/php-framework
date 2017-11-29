@@ -10,6 +10,7 @@ define ("MINI",realpath('./'));
 define("CORE", MINI."/core");
 define("APP",MINI."/app");
 
+
 define('DEBUG', true);
 
 if (DEBUG) {
@@ -19,8 +20,7 @@ if (DEBUG) {
 }
 
 include CORE.'/common/function.php';
-
-include CORE.'/system/base.php';
+include CORE.'/system/Base.php';
 spl_autoload_register('\core\system\Base::autoload');
 \core\system\Base::run();
 

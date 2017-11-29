@@ -6,8 +6,7 @@ class Base {
 	public static function run()
 	{
 		p('ok');
-		$route =new \core\system\Route();
-		$route->index();
+		$route = new Route();
 
 	}
 
