@@ -8,7 +8,7 @@
  */
 define ("MINI",realpath('./'));
 define("CORE", MINI."/core");
-define("APP",MINI."/app");
+define("APP",MINI."/application");
 
 
 define('DEBUG', true);
