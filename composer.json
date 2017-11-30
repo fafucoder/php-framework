@@ -1,0 +1,9 @@
+{
+    "name": "miniphp",
+    "description": "simple php framework",
+    "type": "framework",
+    "keywords": ["php","mini","miniphp"],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}

@@ -14,9 +14,9 @@ define("APP",MINI."/application");
 define('DEBUG', true);
 
 if (DEBUG) {
-	// ini_set('display_error', "On");
+	ini_set('display_errors', "On");
 }else {
-	// ini_set('display_error','Off');
+	ini_set('display_errors','Off');
 }
 
 include CORE.'/common/function.php';
