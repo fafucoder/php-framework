@@ -10,10 +10,15 @@ define ("MINI",realpath('./'));
 define("CORE", MINI."/core");
 define("APP",MINI."/application");
 
-
 define('DEBUG', true);
 
+// composer加载
+require "vendor/autoload.php";
+
 if (DEBUG) {
+	$whoops = new \Whoops\Run;
+	$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+	$whoops->register();
 	ini_set('display_errors', "On");
 }else {
 	ini_set('display_errors','Off');

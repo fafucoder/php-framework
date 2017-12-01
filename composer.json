@@ -4,6 +4,10 @@
     "type": "framework",
     "keywords": ["php","mini","miniphp"],
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "filp/whoops": "*",
+        "symfony/var-dumper":"*",
+        "catfan/medoo":"*",
+        "twig/twig":"*"
     }
 }
