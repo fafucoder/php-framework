@@ -1,9 +1,9 @@
-<?php 
+<?php
 namespace System;
 
 class Controller
 {
-	public function index() {
+	public static function index() {
 		echo "this is system controller function";
 	}
 }
