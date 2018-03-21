@@ -37,10 +37,18 @@ class Loader
 	 */
 	protected $includePath = '';
 
+	/**
+	 * 设置include的路径
+	 * @param string $path 路径
+	 */
 	public function setIncludePath($path) {
 		$this->includePath = $path;
 	}
 
+	/**
+	 * 获取include路径
+	 * @return string 路径
+	 */
 	public function getIncludePath() {
 		return $this->includePath;
 	}
@@ -73,6 +81,10 @@ class Loader
 		krsort($this->prefixes);
 	}
 
+	/**
+	 * 获取类前缀
+	 * @return [type] [description]
+	 */
 	public function getPrefixes() {
 		return $this->prefixes;
 	}

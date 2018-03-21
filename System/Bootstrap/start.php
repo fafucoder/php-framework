@@ -11,14 +11,23 @@ $Loader = new \System\Loader();
 $Loader->register();
 
 //加载composer
-require ROOT_PATH . 'vendor/autoload.php';
-
-//DEBUG配置
-if (DEBUG) {
-	$whoops = new \Whoops\Run();
-	$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-	$whoops->register();
-	ini_set('display_errors', "On");
-}else {
-	ini_set('display_errors','Off');
+$autoload = ROOT_PATH . 'vendor/autoload.php';
+if (file_exists($autoload)) {
+	require ROOT_PATH . 'vendor/autoload.php';
 }
+
+// 启动应用
+// \System\App::run();
+$path = array(
+	'APP_CONF' => APP_PATH.'Conf/',
+	'SYS_CONF' => CORE_PATH."Conf/"
+);
+\System\Config::setConfigPath($path);
+\System\Config::load('default');
+
+$uri = new \System\URI();
+
+var_dump($uri->actions);
+
+var_dump($uri->arguments);
+

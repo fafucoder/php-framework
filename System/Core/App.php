@@ -1,6 +1,7 @@
 <?php
-namespace core\system;
-class Base {
+namespace System;
+
+class APP {
 	public static $classMap = array();
 	public $assign;
 	public static function run()
@@ -52,5 +53,15 @@ class Base {
 			extract($this->assign);
 			include $file;
 		}
+	}
+
+	//DEBUG配置
+	if (DEBUG) {
+		$whoops = new \Whoops\Run();
+		$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+		$whoops->register();
+		ini_set('display_errors', "On");
+	} else {
+		ini_set('display_errors','Off');
 	}
 }

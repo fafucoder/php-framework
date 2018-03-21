@@ -1,9 +1,54 @@
 <?php
-namespace core\system;
-use core\system\Config;
+namespace System;
+
 class Route {
-	public $controller;
-	public $action;
+	/**
+	 * 控制器
+	 * @var string
+	 */
+	public static $controller;
+
+	/**
+	 * 方法
+	 * @var [type]
+	 */
+	public static $action;
+
+	/**
+	 * 配置信息
+	 * @var [type]
+	 */
+	public static $config = array();
+
+	/**
+	 * 路由
+	 */
+	public static $routes = array();
+
+	/**
+	 * 路由类型
+	 */
+	public static $type ;
+
+	/**
+	 * uri
+	 */
+	public $uri;
+
+
+	public function __construct() {
+		self::$routes = array_merge(self::$routes, Config::load('route'));
+		self::$config = array_merge(self::$config, Config::get('url');
+		$this->uri = new Uri();
+
+
+	}
+
+	public function init() {
+		self::$routes = array_merge(self::$routes, Config::load('route'));
+		self::$config = array_merge(self::$config, Config::get('url');
+		
+	}
 	/**
 	* 隐藏对应的index.php
 	* 获取url，参数部分

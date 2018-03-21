@@ -21,7 +21,7 @@
 // spl_autoload_register('\core\system\Base::autoload');
 // \core\system\Base::run();
 
-define('APP_PATH', __DIR__ . '/../Application/');
+define('APP_PATH', __DIR__ . '/Application/');
 
 
 require __DIR__.'/System/Bootstrap/start.php';
