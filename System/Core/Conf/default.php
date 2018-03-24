@@ -33,62 +33,59 @@ return [
     ],
     
     'app' => [
-        // 禁止访问模块
-        'deny_module_list'       => ['common'],
         // 默认控制器名
         'default_controller'     => 'Index',
         // 默认操作名
         'default_action'         => 'index',
         // 默认的空控制器名
-        'empty_controller'       => 'Error',
+        'empty_controller'       => 'Empty',
         // 操作方法前缀
-        'use_action_prefix'      => false,
+        'action_prefix'      => false,
         // 操作方法后缀
         'action_suffix'          => '',
-        // 默认语言
-        'default_lang'           => 'zh-cn',
         // 应用类库后缀
         'class_suffix'           => false,
         // 控制器类后缀
         'controller_suffix'      => false,
         // 默认输出类型
         'default_return_type'    => 'html',
+        //路由模式
+        'url_mode'               => 1,
+        // pathinfo分隔符
+        'pathinfo_depr'          => '/',  //index.php/Index/index/......
+        //common模式默认控制器符
+        'common_controller_depr' => 'c',  //index.php?c=Index&f=index&....
+        'common_action_depr'     => 'a',
+        //rewrite模式默认模块符
+        'rewrite_depr'           => 'r',  //index.php?r=Index/index&id=2.....
         // 默认AJAX 数据返回格式,可选json xml ...
         'default_ajax_return'    => 'json',
         // 默认JSONP格式返回的处理方法
         'default_jsonp_handler'  => 'jsonpReturn',
+        // 默认语言
+        'default_lang'           => 'zh-cn',
         // 默认时区
         'default_timezone'       => 'PRC',
         // 是否开启多语言
         'lang_switch_on'         => false,
         // 默认全局过滤方法 用逗号分隔多个
         'default_filter'         => '',
-    ],
-
-    'url' => [
-        // PATHINFO变量名 用于兼容模式
-        // 0 表示 index.php?c=Index&f=index&....
-        // 1 表示 index.php/Index/index/......
-        // 2 表示 index.php?r=Index/index&id=2.....
-        'url_mode'           => 1,
-        // pathinfo分隔符
-        'pathinfo_depr'          => '/',
-        // HTTPS代理标识
-        'https_agent_name'       => '',
-        // URL伪静态后缀
-        'url_html_suffix'        => 'html',
-        // URL普通方式参数 用于自动生成
-        'url_common_param'       => false,
         // URL参数方式 0 按名称成对解析 1 按顺序解析
         'url_param_type'         => 0,
         // 是否开启路由
         'url_route_on'           => true,
         // 路由使用完整匹配
-        'route_complete_match'   => false,
+        // 'route_complete_match'   => false,
         // 是否自动转换URL中的控制器和操作名
-        'url_convert'            => true,
+        // 'url_convert'            => true,        
+        // 禁止访问模块
+        // 'deny_module_list'       => ['common'],
+        // URL伪静态后缀
+        // 'url_html_suffix'        => 'html',
+        // URL普通方式参数 用于自动生成
+        // 'url_common_param'       => false,
         // 默认的访问控制器层
-        'url_controller_layer'   => 'controller',
+        // 'url_controller_layer'   => 'controller',
     ],
 
     // +----------------------------------------------------------------------
@@ -105,6 +102,7 @@ return [
         'exception_tmpl'         =>'',
         // 错误显示信息,非调试模式有效
         'error_message'          => '页面错误！请稍后再试～',
+        'success_message'        => '操作成功！',
     ],
 
 

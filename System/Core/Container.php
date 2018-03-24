@@ -66,7 +66,6 @@ class Container extends Injector {
 
     /**
      * Load the config to set the properties of container.
-     *
      * @param array $properties
      */
     public function load($properties = array()) {

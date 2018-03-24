@@ -4,17 +4,6 @@ namespace System;
 
 use ArrayIterator;
 
-/**
- * Collection.
- *
- * This class provides a common interface used by many other
- * classes that manage "collections" of data that must be
- * inspected and/or manipulated
- *
- * The class is based on Slim implimentation, MIT license (https://github.com/slimphp/Slim/blob/3.x/LICENSE.md).
- *
- * @since 1.0.0
- */
 class Collection implements \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable {
     /**
      * The source data.

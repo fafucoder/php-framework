@@ -3,21 +3,16 @@
 namespace System;
 
 class Config {
-
     /**
      * List all config
      */
     protected static $config = array();
 
-    /**
-     * List of all loaded config files
-     */
-    public static $is_load = array();
 
     /**
      * container of config path
      */
-    public static $config_path = array();
+    public static $config_path = array(CONF_PATH);
 
     /**
      * 解析配置文件或内容
@@ -36,7 +31,6 @@ class Config {
         $class = false !== strpos($type, '\\') ?
             $type :
             '\\System\\Drivers\\ParseConf\\' . ucwords($type);
-        var_dump($class);
         return self::set((new $class())->parse($config), $name);
     }
 
@@ -45,21 +39,25 @@ class Config {
      * @param  string $file 文件名
      * @param  string $name 配置名
      * @return mixed
+     * @TODO
      */                 
     public static function load($file='', $name = "") {
-        if (!is_file($file)) {
-            $file = $file . CONF_EXT;
-        }
-        $filename= pathinfo($file, PATHINFO_FILENAME);
-        if (array_key_exists($filename, self::$is_load)) {
-            return self::$is_load[$filename];
-        }
-        if ($file = self::findFile($file)) {
+        if (file_exists($file)) {
             $config = self::parse($file, $name);
-            self::$is_load[$filename] = $config;
             return $config;
         }
-        throw new \Exception("file not found");
+
+        $filename= pathinfo($file, PATHINFO_FILENAME);
+        $file = is_file($file) ? $file : $filename .CONF_EXT;
+
+        if (!empty($files = self::findFile($file))) {
+            foreach ($files as $f) {
+                $config = self::parse($f, $name);
+            }
+            return $config;
+        } 
+        throw new \Exception("config file not found");
+        
     }
 
     public static function has($name) {
@@ -86,7 +84,7 @@ class Config {
             } else {
                 // 二维数组
                 $name = explode('.', $name, 2);
-                self::$confi[strtolower($name[0])][$name[1]] = $value;
+                self::$config[strtolower($name[0])][$name[1]] = $value;
             }
             return $value;
         }
@@ -137,7 +135,7 @@ class Config {
      * 清空配置
      * @return null 
      */
-    public function clear() {
+    public static function clear() {
         self::$config = array();
         self::$is_load= array();
     }
@@ -146,9 +144,15 @@ class Config {
     /**
      * 删除某个配置
      */
-    public function remove($name) {
-        if (array_key_exists($name, self::$config)) {
-            unset(self::$config[$name]);
+    public static function remove($name) {
+        if (!strpos($name, ".")) {
+            if (array_key_exists($name, self::$config)) {
+                unset(self::$config[$name]);
+            }
+        }
+        $name = explode(".", $name,2);
+        if (array_key_exists(strtolower($name[0]), self::$config)) {
+            unset(self::$config[$name[0]][$name[1]]);
         }
     }
 
@@ -178,12 +182,14 @@ class Config {
      * @param string $filename 文件名
      */
     public static function findFile($filename) {
+        $file_path = array();
         foreach (self::$config_path as $path) {
             $file = $path . $filename;
             if (file_exists($file)) {
-                return $file;
+                $file_path[] = $file;
             }
         }
+        return $file_path;
     }
 }
 
