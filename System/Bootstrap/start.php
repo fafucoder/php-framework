@@ -21,6 +21,3 @@ if (file_exists($autoload)) {
 //应用启动
 \System\App::run();
 
-// \System\Config::load('xxxxx');
-
-

@@ -74,18 +74,7 @@ return [
         'url_param_type'         => 0,
         // 是否开启路由
         'url_route_on'           => true,
-        // 路由使用完整匹配
-        // 'route_complete_match'   => false,
-        // 是否自动转换URL中的控制器和操作名
-        // 'url_convert'            => true,        
-        // 禁止访问模块
-        // 'deny_module_list'       => ['common'],
-        // URL伪静态后缀
-        // 'url_html_suffix'        => 'html',
-        // URL普通方式参数 用于自动生成
-        // 'url_common_param'       => false,
-        // 默认的访问控制器层
-        // 'url_controller_layer'   => 'controller',
+        'var_method'             => '_method',
     ],
 
     // +----------------------------------------------------------------------
