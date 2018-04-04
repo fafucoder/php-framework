@@ -116,4 +116,8 @@ class Error {
         return in_array($type, [E_ERROR, E_CORE_ERROR, E_COMPILE_ERROR, E_PARSE]);
     }
 
+    public static function halt() {
+        
+    }
+
 }
