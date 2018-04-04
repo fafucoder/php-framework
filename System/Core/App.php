@@ -9,6 +9,8 @@ class App {
 	];
 str;
 
+    public static $config = array();
+
 	public static function run() {
 		self::init();
 		
@@ -45,15 +47,28 @@ str;
 		$sys_config = CORE_PATH . 'Conf/default.php';
 		Config::load($sys_config);
 		if (is_null(Config::findFile('config.php'))) {
-			file_put_contents(CONF.'config.php',confstr);
+			file_put_contents(CONF_PATH . 'config.php',confstr);
 		}
 		Config::load('config');
+		//load extra config
+		self::$config = Config::get();
+		$extra_file = Config::get('app.extra_file_list');
+		if (!empty($extra_file)) {
+			foreach ($extra_file as $file) {
+				$file = strpos($file, ".") ? $file : APP_PATH . $file . EXT;
+				if (is_file($file) && !isset(self::$config[$file])) {
+					self::$config[$file] = include_once($file);
+				}
+			}
+		}
 
+		//load environment file
 		$environment_config = ENVIRONMENT_PATH . ENVIRONMENT . EXT;
 		if (file_exists($environment_config)) {
 			Config::load($environment_config);
 		}
 
+		//load setting file
 		$setting_file = CONF_PATH . 'setting.php';
 		if (file_exists($setting_file)) {
 			$settings = include_once($setting_file);
@@ -76,7 +91,10 @@ str;
 		}
 	}
 
-	//定义常量
+	/**
+	 * 定义常量			
+	 * @return void
+	 */
 	public static function define_const() {
 		$home = base_url();
 		define("__HOME__",$home);
