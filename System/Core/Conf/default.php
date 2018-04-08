@@ -82,16 +82,12 @@ return [
     // +-----------------------------------------------------------------
 
     'template'    => [
-        // 模板后缀
-        'view_suffix'  => 'html',
-        'layout_on'    => false,
-        'layout_path'  => layout,
-        // 默认跳转页面对应的模板文件
+        'view_suffix'            => 'html',
+        'layout_on'              => false,
+        'layout_path'            => layout,
         'dispatch_success_tmpl'  => '',
         'dispatch_error_tmpl'    => '',
-        // 异常页面的模板文件
         'exception_tmpl'         =>'',
-        // 错误显示信息,非调试模式有效
         'error_message'          => '页面错误！请稍后再试～',
         'success_message'        => '操作成功！',
     ],

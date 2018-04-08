@@ -1,6 +1,5 @@
 <?php 
 namespace core\system;
-use core\system\Config;
 use Medoo\Medoo;
 class Model extends Medoo {
 	public function __construct(){

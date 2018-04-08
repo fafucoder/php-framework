@@ -8,8 +8,10 @@ class App {
 		//返回数组格式 key => value
 	];
 str;
-
+	
     public static $config = array();
+
+    public static $dispatch;
 
 	public static function run() {
 		self::init();
@@ -51,13 +53,12 @@ str;
 		}
 		Config::load('config');
 		//load extra config
-		self::$config = Config::get();
 		$extra_file = Config::get('app.extra_file_list');
 		if (!empty($extra_file)) {
-			foreach ($extra_file as $file) {
-				$file = strpos($file, ".") ? $file : APP_PATH . $file . EXT;
-				if (is_file($file) && !isset(self::$config[$file])) {
-					self::$config[$file] = include_once($file);
+			foreach ($extra_file as $filename) {
+				$file = strpos($file, ".") ? $filename : APP_PATH . $filename . EXT;
+				if (is_file($file)) {
+					Config::load($file,pathinfo($filename, PATHINFO_FILENAME));
 				}
 			}
 		}
@@ -118,5 +119,9 @@ str;
 		} else {
 			ini_set('display_errors','Off');
 		}
+	}
+
+	public static function routeCheck($request) {
+
 	}
 }
