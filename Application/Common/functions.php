@@ -1,2 +1,4 @@
 <?php
-// 这是用户自定义的function函数
+function demo($demo) {
+	var_dump($demo);
+}

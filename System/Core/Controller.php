@@ -1,7 +1,7 @@
 <?php
 namespace System;
 
-class Controller {	
+class Controller {
 
 	/**
 	 * 视图类
@@ -45,9 +45,9 @@ class Controller {
 
 	/**
 	 * 前置操作
-	 * @param  string $action  
-	 * @param  array $options 
-	 * @return mixed          
+	 * @param  string $action
+	 * @param  array $options
+	 * @return mixed
 	 */
 	public function beforeAction($action, $options) {
 		if (isset($optons['only'])) {
@@ -76,8 +76,8 @@ class Controller {
 
 	/**
 	 * 后置操作
-	 * @param  string $action  
-	 * @param  arrray $options 
+	 * @param  string $action
+	 * @param  arrray $options
 	 * @return mixed
 	 */
 	public function afterAction($action, $options) {
@@ -102,14 +102,14 @@ class Controller {
 				$params = explode(",", $options['params']);
 			}
 		}
-		call_user_func_array(array($this, $method), isset($params) ? $params : []);		
+		call_user_func_array(array($this, $method), isset($params) ? $params : []);
 	}
 
 	public function render() {
 
 	}
 
-	
+
 	public function __set() {
 
 	}

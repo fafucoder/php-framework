@@ -2,80 +2,50 @@
 
 return [
 
-    // +-----------------------------------------------------------------
-    // | 日志设置
-    // +-----------------------------------------------------------------
+    // 默认控制器名
+    'default_controller'     => 'Index',
+    // 默认操作名
+    'default_action'         => 'index',
+    // 默认的空控制器名
+    'empty_controller'       => 'Empty',
+    // 操作方法前缀
+    'action_prefix'      => false,
+    // 操作方法后缀
+    'action_suffix'          => '',
+    // 应用类库后缀
+    'class_suffix'           => false,
+    // 控制器类后缀
+    'controller_suffix'      => false,
+    // 默认输出类型
+    'default_return_type'    => 'html',
+    //路由模式
+    'url_mode'               => 1,
+    // pathinfo分隔符
+    'pathinfo_depr'          => '/',  //index.php/Index/index/......
+    //rewrite模式默认模块符
+    'rewrite_depr'           => 'r',  //index.php?r=Index/index&id=2.....
+    // 默认AJAX 数据返回格式,可选json xml ...
+    'default_ajax_return'    => 'json',
+    // 默认JSONP格式返回的处理方法
+    'default_jsonp_handler'  => 'jsonpReturn',
+    // 默认语言
+    'default_lang'           => 'zh-cn',
+    // 默认时区
+    'default_timezone'       => 'PRC',
+    // 是否开启多语言
+    'lang_switch_on'         => false,
+    // 默认全局过滤方法 用逗号分隔多个
+    'default_filter'         => '',
+    // URL参数方式 0 按名称成对解析 1 按顺序解析
+    'url_param_type'         => 0,
+    // 是否开启路由
+    'url_route_on'           => true,
 
-    'log' => [
-        // 日志记录方式，内置 file socket 支持扩展
-        'type'  => 'File',
-        // 日志保存目录
-        'path'  => LOG_PATH,
-        // 日志记录级别
-        'level' => [],
-        //日志文件后缀
-        'ext' => EXT,
-    ],
+    'var_method'             => '_method',
 
-    // +-----------------------------------------------------------------
-    // | 缓存设置
-    // +-----------------------------------------------------------------
+    'extra_file_list'        => array(),
 
-    'cache' => [
-        // 驱动方式
-        'type'   => 'File',
-        // 缓存保存目录
-        'path'   => CACHE_PATH,
-        // 缓存前缀
-        'prefix' => '',
-        // 缓存有效期 0表示永久缓存
-        'expire' => 0,
-    ],
-    
-    'app' => [
-        // 默认控制器名
-        'default_controller'     => 'Index',
-        // 默认操作名
-        'default_action'         => 'index',
-        // 默认的空控制器名
-        'empty_controller'       => 'Empty',
-        // 操作方法前缀
-        'action_prefix'      => false,
-        // 操作方法后缀
-        'action_suffix'          => '',
-        // 应用类库后缀
-        'class_suffix'           => false,
-        // 控制器类后缀
-        'controller_suffix'      => false,
-        // 默认输出类型
-        'default_return_type'    => 'html',
-        //路由模式
-        'url_mode'               => 1,
-        // pathinfo分隔符
-        'pathinfo_depr'          => '/',  //index.php/Index/index/......
-        //rewrite模式默认模块符
-        'rewrite_depr'           => 'r',  //index.php?r=Index/index&id=2.....
-        // 默认AJAX 数据返回格式,可选json xml ...
-        'default_ajax_return'    => 'json',
-        // 默认JSONP格式返回的处理方法
-        'default_jsonp_handler'  => 'jsonpReturn',
-        // 默认语言
-        'default_lang'           => 'zh-cn',
-        // 默认时区
-        'default_timezone'       => 'PRC',
-        // 是否开启多语言
-        'lang_switch_on'         => false,
-        // 默认全局过滤方法 用逗号分隔多个
-        'default_filter'         => '',
-        // URL参数方式 0 按名称成对解析 1 按顺序解析
-        'url_param_type'         => 0,
-        // 是否开启路由
-        'url_route_on'           => true,
-
-        'var_method'             => '_method',
-
-        'extra_file_list'        => array(),
-    ],
+    'debug'                  => true,
 
     // +-----------------------------------------------------------------
     // | 模板设置
@@ -83,22 +53,26 @@ return [
 
     'template'    => [
         'view_suffix'            => 'html',
-        'layout_on'              => false,
-        'layout_path'            => layout,
+
+        'layout_on'              => true,
+
+        'layout_path'            => 'layout',
+
+        'layout_content_replace' => '{__CONTENT__}',
+
         'dispatch_success_tmpl'  => '',
+
         'dispatch_error_tmpl'    => '',
+
         'exception_tmpl'         =>'',
+
         'error_message'          => '页面错误！请稍后再试～',
+
         'success_message'        => '操作成功！',
-    ],
 
+        'cache'                  => false,
 
-    // +-----------------------------------------------------------------
-    // | Trace设置 开启 app_trace 后 有效
-    // +-----------------------------------------------------------------
-    'trace'                  => [
-        // 内置Html Console 支持扩展
-        'type' => 'Html',
+        'debug'                  => false,
     ],
 
     // +-----------------------------------------------------------------
@@ -141,7 +115,6 @@ return [
     // +-----------------------------------------------------------------
     // | 数据库设置
     // +-----------------------------------------------------------------
-
     'database'               => [
         // 数据库类型
         'type'            => 'mysql',
@@ -183,5 +156,33 @@ return [
         'datetime_format' => 'Y-m-d H:i:s',
         // 是否需要进行SQL性能分析
         'sql_explain'     => false,
+    ],
+
+    // +-----------------------------------------------------------------
+    // | 日志设置
+    // +-----------------------------------------------------------------
+    'log' => [
+        // 日志记录方式，内置 file socket 支持扩展
+        'type'  => 'File',
+        // 日志保存目录
+        'path'  => LOG_PATH,
+        // 日志记录级别
+        'level' => [],
+        //日志文件后缀
+        'ext' => EXT,
+    ],
+
+    // +-----------------------------------------------------------------
+    // | 缓存设置
+    // +-----------------------------------------------------------------
+    'cache' => [
+        // 驱动方式
+        'type'   => 'File',
+        // 缓存保存目录
+        'path'   => CACHE_PATH,
+        // 缓存前缀
+        'prefix' => '',
+        // 缓存有效期 0表示永久缓存
+        'expire' => 0,
     ],
 ];

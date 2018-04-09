@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace System;
 
 class View {
@@ -25,7 +25,14 @@ class View {
 	 * twig模板引擎
 	 * @var [type]
 	 */
-	protected $twig;
+	public $twig;
+
+	/**
+	 * twig 缓存
+	 */
+	protected $twig_config = array(
+		'auto_reload' => true,
+	);
 
 	/**
 	 * 配置文件
@@ -42,42 +49,139 @@ class View {
 	/**
 	 * 构造器
 	 */
-	private static function __construct() {
-		$this->config = Config::get('templete');
-		if ($this->config['layout_on']) {
-			$this->layout = $this->config['layout_path'];
-		} 
-		$this->twig = new \Twig_Loader_Filesystem ($this->layout); 
+	private function __construct() {
+		$this->config = Config::get('template');
+		if (defined('VIEW_PATH')) {
+			$this->view_path = VIEW_PATH;
+		}
+		$this->registerGlobal();
+
+		$loader = new \Twig_Loader_Filesystem($this->view_path);
+		if ($this->config['cache']) {
+			$this->twig_config['cache'] = CACHE_PATH;
+		}
+		$this->twig_config['debug'] = $this->config['debug'];
+		$this->twig = new \Twig_Environment($loader, $this->twig_config);
 	}
 
 	/**
 	 * 唯一实例化
-	 * @return View 
+	 * @return View
 	 */
 	public static function instance() {
 		if (is_null(self::$instance)) {
-			self::$instance = new self();
+			self::$instance = new static();
 		}
 		return self::$instance;
 	}
 
-
-
+	/**
+	 * 变量赋值
+	 * @param string|array $name
+	 * @param string $value
+	 * @return void;
+	 */
 	public function assign($name, $value = '') {
 		if (is_array($name)) {
 			$this->data = array_merge($this->data, $name);
 		} else {
 			$this->data[$name] = $value;
 		}
-		return $this;
 	}
 
-	public function render() {
+	/**
+	 * 直接渲染输出
+	 * @param  string $template 模板文件
+	 * @param  string $data     数据
+	 * @return content
+	 */
+	public function show($template='', $data = array()) {
+		if ($data) {
+			$this->data = array_merge($this->data, $data);
+		}
+		return $this->render($template, $this->data);
+	}
 
+	/**
+	 * 渲染输出
+	 * @param  string  $templateFile [description]
+	 * @param  boolean $layout       [description]
+	 * @return [type]                [description]
+	 */
+	public function display($templateFile = '', $data = array(), $layout = true) {
+		if ($data) {
+			$this->data = array_merge($this->data, $data);
+		}
+		if ($layout && $this->config['layout_on']) {
+			return $this->parseLayout($templateFile);
+		} else {
+			return $this->parseTemplate($templateFile);
+		}
+	}
+
+	/**
+	 * 解析模板文件
+	 * @param  string $templete 模板文件
+	 * @return strting
+	 */
+	public function parseTemplate($templateFile = '') {
+		$file = $this->view_path . "/" . strtolower($templateFile);
+		if (!file_exists($file)) {
+			return false;
+		}
+		$content = $this->render($templateFile, $this->data);
+		return $content;
+	}
+
+	/**
+	 * 解析布局
+	 * @param  string $layoutFile [description]
+	 * @return
+	 */
+	public function parseLayout($layoutFile = '') {
+		if ($this->config['layout_on']) {
+			$this->layout = $this->config['layout_path'];
+			$layout_file = $this->view_path . 'layout/' . $this->layout . '.' . $this->config['view_suffix'];
+			if (!is_file($layout_file)) {
+				return false;
+			}
+			$layout_file = 'layout/' . $this->layout . '.' . $this->config['view_suffix'];
+
+			$content = $this->parseTemplate($layoutFile);
+
+			$layout_file = $this->render($layout_file, $this->data);
+
+			$content = str_replace($this->config['layout_content_replace'], $content, $layout_file);
+
+			return $content;
+
+		} else {
+
+			return $this->parseTemplate($layoutFile);
+		}
+
+
+	}
+
+	public function render($template, $data) {
+		return $this->twig->render($template, $data);
+	}
+
+	/**
+	 * 注册全局变量
+	 */
+	public function registerGlobal() {
+		$setting_file = CONF_PATH . 'setting.php';
+		if (file_exists($setting_file)) {
+			$settings = include_once($setting_file);
+			foreach ($settings as $name => $value) {
+				$this->data[$name] = $value;
+			}
+		}
 	}
 
 	public function __set($name, $value) {
-		$this->data[$name] = $value;	
+		$this->data[$name] = $value;
 	}
 
 	public function __get($name) {

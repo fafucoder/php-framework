@@ -8,14 +8,14 @@ class App {
 		//返回数组格式 key => value
 	];
 str;
-	
+
     public static $config = array();
 
     public static $dispatch;
 
 	public static function run() {
 		self::init();
-		
+
 	}
 
 	public static function init() {
@@ -68,17 +68,6 @@ str;
 		if (file_exists($environment_config)) {
 			Config::load($environment_config);
 		}
-
-		//load setting file
-		$setting_file = CONF_PATH . 'setting.php';
-		if (file_exists($setting_file)) {
-			$settings = include_once($setting_file);
-			foreach ($settings as $name => $value) {
-				$GLOBALS[$name] = $value;
-			}
-		} else {
-			file_put_contents($setting_file,confstr);
-		}
 	}
 
 	/**
@@ -93,7 +82,7 @@ str;
 	}
 
 	/**
-	 * 定义常量			
+	 * 定义常量
 	 * @return void
 	 */
 	public static function define_const() {

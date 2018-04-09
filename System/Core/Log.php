@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace System;
 
 class Log {
@@ -11,7 +11,7 @@ class Log {
 	/**
 	 * 保存日志
 	 * @var array
-	 */	
+	 */
 	protected static $log  = "";
 
 	/**
@@ -39,7 +39,6 @@ class Log {
 			return;
 		}
 		self::$log  = "$message ";
-		ob_clean();
 	}
 
 	/**
