@@ -39,8 +39,7 @@ class Controller {
 		}
 	}
 
-	protected function _init(){
-
+	public function _init(){
 	}
 
 	/**
@@ -105,16 +104,54 @@ class Controller {
 		call_user_func_array(array($this, $method), isset($params) ? $params : []);
 	}
 
-	public function render() {
+
+	public function display() {
+
+	}
+
+	public function show() {
+
+	}
+
+	public function assign() {
+
+	}
+
+	public function __set($name, $value) {
+		$this->assign($name, $value);
+	}
+
+	public function __get($name) {
+
+	}
+
+	public function __isset($name) {
+
+	}
+
+	public function __call($method, $params) {
+
+	}
+
+	public function __callStatic($method, $params) {
+
+	}
+
+	public function jump() {
+
+	}
+
+	public function redirect() {
+
+	}
+
+	public function success() {
+
+	}
+
+	public function error() {
 
 	}
 
 
-	public function __set() {
-
-	}
-
-	public function __get() {
-
-	}
 }

@@ -18,12 +18,11 @@ return [
     'controller_suffix'      => false,
     // 默认输出类型
     'default_return_type'    => 'html',
-    //路由模式
-    'url_mode'               => 1,
     // pathinfo分隔符
     'pathinfo_depr'          => '/',  //index.php/Index/index/......
     //rewrite模式默认模块符
-    'rewrite_depr'           => 'r',  //index.php?r=Index/index&id=2.....
+    'var_pathinfo'           => 'r',  //index.php?r=Index/index&id=2.....
+    'pathinfo_fetch'         => ['ORIG_PATH_INFO', 'REDIRECT_PATH_INFO', 'REDIRECT_URL'],
     // 默认AJAX 数据返回格式,可选json xml ...
     'default_ajax_return'    => 'json',
     // 默认JSONP格式返回的处理方法
@@ -46,6 +45,9 @@ return [
     'extra_file_list'        => array(),
 
     'debug'                  => true,
+
+    // URL伪静态后缀
+    'url_html_suffix'        => 'html',
 
     // +-----------------------------------------------------------------
     // | 模板设置
@@ -117,19 +119,19 @@ return [
     // +-----------------------------------------------------------------
     'database'            => [
         // 数据库类型
-        'database_type'   => 'mysql',
+        'database_type'            => 'mysql',
         // 数据库连接DSN配置
-        'database_dsn'    => [],
+        'database_dsn'             => [],
         // 服务器地址
-        'server'          => '127.0.0.1',
+        'server'        => '127.0.0.1',
         // 数据库名
-        'database_name'   => '',
+        'database_name'        => 'cosphp',
         // 数据库用户名
-        'username'        => '',
+        'username'        => 'root',
         // 数据库密码
-        'password'        => '',
+        'password'        => 'toor',
         // 数据库连接端口
-        'port'            => '',
+        'port'        => '',
         // 数据库编码默认采用utf8
         'charset'         => 'utf8',
         // 数据库表前缀

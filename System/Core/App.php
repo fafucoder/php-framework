@@ -2,29 +2,50 @@
 namespace System;
 
 class App {
-	const confstr = <<<str
-	<?php
-	return [
-		//返回数组格式 key => value
-	];
-str;
-
-    public static $config = array();
 
     public static $dispatch;
 
-	public static function run() {
-		self::init();
+    public static $init = false;
 
-	}
+    public static $file = [];
 
-	public static function init() {
-		//创建应用目录
-		self::mkdir();
-		self::initCommon();
-		self::define_const();
-		self::loadConfig();
-		self::debug();
+	// public static function run() {
+	// 	self::init();
+	// }
+	
+	// public static function init() {
+	// 	//创建应用目录
+	// 	self::mkdir();
+	// 	self::initCommon();
+	// 	self::define_const();
+	// 	self::loadConfig();
+	// 	self::debug();
+	// }
+	
+	public static function run(Request $request = null) {
+		$request = is_null($request) ? Request::instance() : $request;
+		try {
+			//创建应用目录
+			Build::checkDir();
+			//加载公共文件
+			self::initCommon();
+			//加载常量
+			self::defineConst();
+			//加载配置
+			$config = self::loadConfig();
+			//信息调度
+			$dispatch = self::$dispatch;
+			if (empty($dispatch)) {
+				$dispatch = self::routeCheck($request, $config);
+			}
+			exit;
+			$request->dispatch($dispatch);
+			//执行应用
+			$data = self::exec($dispatch, $config);
+
+		} catch (Exception $e) {
+			return $e->getMessage();
+		}
 	}
 
 	//加载 common
@@ -48,10 +69,15 @@ str;
 	public static function loadConfig() {
 		$sys_config = CORE_PATH . 'Conf/default.php';
 		Config::load($sys_config);
-		if (is_null(Config::findFile('config.php'))) {
-			file_put_contents(CONF_PATH . 'config.php',confstr);
+
+		$app_config = ['config','database'=>'database'];
+		foreach ($app_config as $name => $file) {
+			if (is_numeric($name)) {
+				Config::load($file);
+			} else {
+				Config::load($file, $name);
+			}
 		}
-		Config::load('config');
 		//load extra config
 		$extra_file = Config::get('app.extra_file_list');
 		if (!empty($extra_file)) {
@@ -68,24 +94,15 @@ str;
 		if (file_exists($environment_config)) {
 			Config::load($environment_config);
 		}
-	}
 
-	/**
-	 * 创建目录
-	 * @return null
-	 */
-	public static function mkdir() {
-		$dir_path = array(APP_PATH,COMMON_PATH,CONF_PATH,ENVIRONMENT_PATH);
-		foreach ($dir_path as $dir) {
-			is_dir($dir) || mkdir($dir,0777,true);
-		}
+		return Config::get();
 	}
 
 	/**
 	 * 定义常量
 	 * @return void
 	 */
-	public static function define_const() {
+	public static function defineConst() {
 		$home = base_url();
 		define("__HOME__",$home);
 		define("__ROOT__",dirname(__HOME__) . SP );
@@ -110,7 +127,21 @@ str;
 		}
 	}
 
-	public static function routeCheck($request) {
-
+	public static function routeCheck($request, array $config) {
+		$path = $request->path();
+		$depr   = $config['pathinfo_depr'];
+        $result = false;
+        $route_file = CONF_PATH . 'route' . CONF_EXT;
+        if (is_file($route_file)) {
+        	$rules = include $route_file;
+        	is_array($rules) && Route::import($rules);
+        }
+        $result = Route::check($request, $path, $depr);
+        if (false === $result) {
+        	$result = Route::parseUrl($path, $depr);
+        }
+        var_dump($result);
+        exit;
 	}
+
 }

@@ -74,7 +74,7 @@ class Build {
 			}
 
 			foreach ($files as $file => $path) {
-				if (!is_file($path . $file)) {
+				if (!file_exists($path . $file)) {
 					file_put_contents($path . $file, "<?php");
 				}
 			}
@@ -128,7 +128,7 @@ class Build {
 	}
 
 	public static function buildController($controller_path) {
-		file_put_contents($controllers_path . 'IndexController.php',self::$controller);
+		file_put_contents($controller_path . 'IndexController.php',self::$controller);
 	}
 
 	public static function buildModel($model_path) {

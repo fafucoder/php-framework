@@ -23,6 +23,7 @@ class Error {
      * @return void
      */
     public static function error_handler($errno, $error, $file, $line) {
+        var_dump($errno, $error, $file, $line);
         if (!self::isFatal($errno)) {
             ob_end_clean();
             $errorStr = "[$errno] $error " .$file. " 第 $line 行.";
@@ -57,9 +58,9 @@ class Error {
        $error = array();
        $error['message'] = $e->getMessage();
        $error['code'] = $e->getCode();
+       $error['file'] = $e->getFile();
+       $error['line'] = $e->getLine();
        $trace         =   $e->getTrace();
-       $error['file'] = $trace[0]['file'];
-       $error['line'] = $trace[0]['line'];
        $error['class'] = isset($trace[0]['class']) ? $trace[0]['class'] : "" ;
        $error['function'] = isset($trace[0]['function']) ? $trace[0]['function'] : "" ;
        $error['trace']    =   $e->getTraceAsString();

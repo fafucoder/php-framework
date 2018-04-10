@@ -21,7 +21,7 @@ class Config {
      * @param  string $name   配置名（如设置即表示二级配置）
      * @return mixed
      */
-    public static function parse($file, $type = '', $name = '') {
+    public static function parse($file, $name = '', $type = '') {
         if (empty($type)) {
             $type = pathinfo($file, PATHINFO_EXTENSION);
         }
@@ -41,7 +41,7 @@ class Config {
      * @return mixed
      * @TODO
      */                 
-    public static function load($file='', $name = "") {
+    public static function load($file='', $name = "",$type = '') {
         if (file_exists($file)) {
             $config = self::parse($file, $name);
             return $config;

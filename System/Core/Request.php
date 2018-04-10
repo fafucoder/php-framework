@@ -155,8 +155,8 @@ class Request {
      * @param  array $args   参数
      * @return mixed         
      */
-    public function __call($method,$args) {
-        if (array_diff_key($method, self::$hook)) {
+    public function __call($method, $args) {
+        if (array_key_exists($method, self::$hook)) {
             array_unshift($args, $this);
             return call_user_func_array(self::$hook[$method], $args);
         } else {
@@ -383,8 +383,25 @@ class Request {
      */
     public function pathinfo() {
         if (is_null($this->pathinfo)) {
-            
+            if (isset($_GET[Config::get('var_pathinfo')])) {
+                // 判断URL里面是否有兼容模式参数
+                $_SERVER['PATH_INFO'] = $_GET[Config::get('var_pathinfo')];
+                unset($_GET[Config::get('var_pathinfo')]);
+            } 
+
+            // 分析PATHINFO信息
+            if (!isset($_SERVER['PATH_INFO'])) {
+                foreach (Config::get('pathinfo_fetch') as $type) {
+                    if (!empty($_SERVER[$type])) {
+                        $_SERVER['PATH_INFO'] = (0 === strpos($_SERVER[$type], $_SERVER['SCRIPT_NAME'])) ?
+                        substr($_SERVER[$type], strlen($_SERVER['SCRIPT_NAME'])) : $_SERVER[$type];
+                        break;
+                    }
+                }
+            }
+            $this->pathinfo = empty($_SERVER['PATH_INFO']) ? '/' : ltrim($_SERVER['PATH_INFO'], '/');
         }
+        return $this->pathinfo;
     }
 
     /**
@@ -393,6 +410,21 @@ class Request {
      * @todo  pathinfo()
      */
     public function path() {
+        if (is_null($this->path)) {
+            $suffix   = Config::get('url_html_suffix');
+            $pathinfo = $this->pathinfo();
+            if (false === $suffix) {
+                // 禁止伪静态访问
+                $this->path = $pathinfo;
+            } elseif ($suffix) {
+                // 去除正常的URL后缀
+                $this->path = preg_replace('/\.(' . ltrim($suffix, '.') . ')$/i', '', $pathinfo);
+            } else {
+                // 允许任何后缀访问
+                $this->path = preg_replace('/\.' . $this->ext() . '$/i', '', $pathinfo);
+            }
+        }
+        return $this->path;
 
     }
 
@@ -497,7 +529,7 @@ class Request {
     public function route($name = '', $default = null, $filter = "") {
         if (is_array($name)) {
             $this->param = [];
-            return $this->route = array_merge($this->route. $name);
+            return $this->route = array_merge($this->route, $name);
         }
         return $this->input($this->route, $name, $default, $filter);
     }
