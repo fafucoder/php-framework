@@ -1666,7 +1666,11 @@ class Model{
 	public function parseCondition() {
 		foreach ($this->condition as $key => $value) {
 			if ('where' == strtolower($key)) {
-				$where = $value;
+				if (is_array($value)) {
+					foreach ($value as $k => $v) {
+						$where[$k] = $v;
+					}
+				}
 			} elseif(!empty($value)) {
 				$where[strtoupper($key)] = $value;
 			}
