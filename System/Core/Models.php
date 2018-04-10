@@ -3,7 +3,7 @@ namespace System;
 
 use Medoo\Medoo;
 
-class Model {
+class Models {
 
 	/**
 	 * config
@@ -31,15 +31,21 @@ class Model {
 
 	/**
 	 * 更新的数据
-	 * @var 
-	 */		
+	 * @var
+	 */
 	public $data;
 
 	/**
 	 * 选项
 	 * @var array
 	 */
-	public $options = array();
+	public $options = array(
+		'where' => [],
+		'limit'	=> [],
+		'group' => [],
+		'having' => [],
+		'order'	=> [],
+	);
 
 	/**
 	 * 连接的数据表
@@ -58,9 +64,9 @@ class Model {
 	 * 唯一实例化
 	 * @param string $config 数据库连接参数
 	 */
-	private static function Instance(array $config = []) {
+	public static function Instance(array $config = [], $table = null) {
 		if (is_null(self::$instance)) {
-			self::$instance = new self($config);
+			self::$instance = new self($config, $table);
 		}
 		return self::$instance;
 	}
@@ -75,27 +81,30 @@ class Model {
 		} else {
 			$this->config = Config::get('database');
 		}
+		if ($this->config['database_type'] == 'sqlite') {
+			$this->config['database_file'] = $this->config['params']['database_file'];
+		}
 		$this->table = $table;
-		$this->connnect = new Medoo($this->config);
+		$this->connect = new Medoo($this->config);
 	}
 
 	/**
 	 * table
-	 * @param  string $table 
-	 * @return $this        
+	 * @param  string $table
+	 * @return $this
 	 */
 	public function table($table) {
 		$this->table = $table;
 		return $this;
 	}
-	
+
 	/**
 	 * where语句
 	 * @param  array   $where where条件
-	 * @param  boolean $merge 
+	 * @param  boolean $merge
 	 * @return $this
 	 */
-	public function where(array $where, $merge = true) {
+	public function where(array $where = array(), $merge = true) {
 		if ($merge) {
 			$this->options['where'] = array_merge($this->options['where'], $where);
 		} else {
@@ -106,7 +115,7 @@ class Model {
 
 	/**
 	 * limit
-	 * @param  mixed $offset 
+	 * @param  mixed $offset
 	 * @param  mixed  $length
 	 * @return $this
 	 */
@@ -121,12 +130,12 @@ class Model {
 
 	/**
 	 * 分组
-	 * @param  string|array $group 
+	 * @param  string|array $group
 	 * @return $this
 	 */
 	public function group($group){
 		if (is_array($group)) {
-			$this->options['group'] = array_merge($this->options['group'], $group); 
+			$this->options['group'] = array_merge($this->options['group'], $group);
 		} else {
 			$this->options['group'] = $group;
 		}
@@ -135,8 +144,8 @@ class Model {
 
 	/**
 	 * having条件
-	 * @param  array|string $having 
-	 * @return $this         
+	 * @param  array|string $having
+	 * @return $this
 	 */
 	public function having($having) {
 		$this->options['having'] = $having;
@@ -159,22 +168,22 @@ class Model {
 
 	/**
 	 * 字段
-	 * @param  string|array $fields 
-	 * @return $this         
+	 * @param  string|array $fields
+	 * @return $this
 	 */
 	public function fields($fields) {
 		if (is_array($fields)) {
 			$this->fields = array_merge($this->fields, $fields);
 		} else {
-			$this->fields = $fields
+			$this->fields = $fields;
 		}
 		return $this;
 	}
 
 	/**
 	 * 更新的数据
-	 * @param  array|string $data 
-	 * @return $this       
+	 * @param  array|string $data
+	 * @return $this
 	 */
 	public function data($data) {
 		if (is_array($data)) {
@@ -186,12 +195,12 @@ class Model {
 	}
 	/**
 	 * order
-	 * @param  string|array $order 
-	 * @return $this        
+	 * @param  string|array $order
+	 * @return $this
 	 */
 	public function order($order) {
 		if (is_array($order)) {
-			$this->options['order'] = array_merge($this->options['order'], $order); 
+			$this->options['order'] = array_merge($this->options['order'], $order);
 		} else {
 			$this->options['order'] = $order;
 		}
@@ -212,13 +221,21 @@ class Model {
 	 */
 	public function insert() {
 		$where = $this->parseOptions();
+		// print_r($where);exit;
+		$where = ['username'=>'linrc','password'=>'admin'];
+		$ins = $this->connect->insert('user',[
+			'id' => 10,
+			'username' => 'linrc',
+			'password' => 'admin'
+		]);
+		var_dump($ins);exit;
 		$this->connect->insert($this->table, $where);
 		return $this;
 	}
 
 	/**
 	 * 数据库查询
-	 * @return array 
+	 * @return array
 	 */
 	public function select() {
 		$where = $this->parseOptions();
@@ -307,8 +324,9 @@ class Model {
 		foreach ($this->options as $key => $value) {
 			if ('where' == strtolower($key)) {
 				$where[] = $value;
+			} elseif(!empty($value)) {
+				$where[strtoupper($key)] = $value;
 			}
-			$where[strtoupper($key)] = $value;
 		}
 		return $where;
 	}
@@ -335,11 +353,11 @@ class Model {
 			$where = get_object_vars($where);
 		}
 		if (isset($this->options['where'])) {
-			$this->options['where'] = array_merge($this->options['where'], $where); 
+			$this->options['where'] = array_merge($this->options['where'], $where);
 		} else {
 			$this->options['where'] = $where;
 		}
-	} 
+	}
 
-	
+
 }
