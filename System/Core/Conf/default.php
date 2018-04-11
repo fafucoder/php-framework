@@ -13,15 +13,16 @@ return [
     // 操作方法后缀
     'action_suffix'          => '',
     // 应用类库后缀
-    'class_suffix'           => false,
+    'class_suffix'           => 'Controller',
     // 控制器类后缀
-    'controller_suffix'      => false,
+    'controller_suffix'      => 'Controller',
     // 默认输出类型
     'default_return_type'    => 'html',
     // pathinfo分隔符
     'pathinfo_depr'          => '/',  //index.php/Index/index/......
     //rewrite模式默认模块符
     'var_pathinfo'           => 'r',  //index.php?r=Index/index&id=2.....
+    //pathinfo fetch
     'pathinfo_fetch'         => ['ORIG_PATH_INFO', 'REDIRECT_PATH_INFO', 'REDIRECT_URL'],
     // 默认AJAX 数据返回格式,可选json xml ...
     'default_ajax_return'    => 'json',
@@ -31,21 +32,14 @@ return [
     'default_lang'           => 'zh-cn',
     // 默认时区
     'default_timezone'       => 'PRC',
-    // 是否开启多语言
-    'lang_switch_on'         => false,
     // 默认全局过滤方法 用逗号分隔多个
     'default_filter'         => '',
-    // URL参数方式 0 按名称成对解析 1 按顺序解析
-    'url_param_type'         => 0,
-    // 是否开启路由
-    'url_route_on'           => true,
-
+    //var_method
     'var_method'             => '_method',
-
+    //额外的文件
     'extra_file_list'        => array(),
-
+    //是否开启debug
     'debug'                  => true,
-
     // URL伪静态后缀
     'url_html_suffix'        => 'html',
 
@@ -82,24 +76,18 @@ return [
     // +-----------------------------------------------------------------
     'session'    => [
         'id'             => '',
-        // SESSION_ID的提交变量,解决flash上传跨域
-        'var_session_id' => '',
-        // SESSION 前缀
-        'prefix'         => 'think',
+
+        'session_id'     => '',
         // 驱动方式 支持redis memcache memcached
         'type'           => '',
-        // 是否自动开启 SESSION
+
         'auto_start'     => true,
-        'httponly'       => true,
-        'secure'         => false,
     ],
 
-    // +-----------------------------------------------------------------
+    // +---------------------------------------------------------------
     // | Cookie设置
-    // +-----------------------------------------------------------------
+    // +---------------------------------------------------------------
     'cookie'   => [
-        // cookie 名称前缀
-        'prefix'    => '',
         // cookie 保存时间
         'expire'    => 0,
         // cookie 保存路径
@@ -108,9 +96,7 @@ return [
         'domain'    => '',
         //  cookie 启用安全传输
         'secure'    => false,
-        // httponly设置
-        'httponly'  => '',
-        // 是否使用 setcookie
+
         'setcookie' => true,
     ],
 

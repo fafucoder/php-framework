@@ -42,7 +42,6 @@ class Executable {
             $this->reflection = new ReflectionFunction($callable);
         } elseif ($this->isClosure()) {
             if ($callable instanceof Closure) {
-                // see https://bugs.php.net/bug.php?id=65432
                 $this->reflection = new ReflectionFunction($callable);
             } else {
                 $this->reflection = new ReflectionMethod($callable, '__invoke');

@@ -1,4 +1,4 @@
 <?php
-function demo($demo) {
-	var_dump($demo);
+function p($var) {
+	var_dump($var);
 }

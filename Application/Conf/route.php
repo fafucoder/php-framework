@@ -1,4 +1,9 @@
-<?php 
+<?php
 return [
-'login' =>'user/login',
+'login/:id' =>'user/login',
+'login/name' =>'user/login',
+'[hello]'     => [
+    ':id'   => ['index/hello', ['method' => 'get'], ['id' => '\d+']],
+    ':name' => ['index/hello', ['method' => 'post']],
+],
 ];

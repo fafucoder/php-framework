@@ -9,10 +9,15 @@ class App {
 
     public static $file = [];
 
+    /**
+     * @var bool 应用类库后缀
+     */
+    public static $suffix = false;
+
 	// public static function run() {
 	// 	self::init();
 	// }
-	
+
 	// public static function init() {
 	// 	//创建应用目录
 	// 	self::mkdir();
@@ -21,7 +26,7 @@ class App {
 	// 	self::loadConfig();
 	// 	self::debug();
 	// }
-	
+
 	public static function run(Request $request = null) {
 		$request = is_null($request) ? Request::instance() : $request;
 		try {
@@ -38,7 +43,7 @@ class App {
 			if (empty($dispatch)) {
 				$dispatch = self::routeCheck($request, $config);
 			}
-			exit;
+            var_dump($dispatch);
 			$request->dispatch($dispatch);
 			//执行应用
 			$data = self::exec($dispatch, $config);
@@ -127,6 +132,24 @@ class App {
 		}
 	}
 
+    /**
+     * 执行应用
+     * @param  array $dispatch 调度信息
+     * @param  array $config   配置信息
+     * @return  mixed
+     */
+    public static function exec($dispatch, $config) {
+
+    }
+    /**
+     * 调度信息
+     * @param  array $dispatch 调度信息
+     * @return void
+     */
+    public static function dispatch($dispatch) {
+        self::$dispatch = ['application' => $dispatch];
+    }
+
 	public static function routeCheck($request, array $config) {
 		$path = $request->path();
 		$depr   = $config['pathinfo_depr'];
@@ -141,7 +164,7 @@ class App {
         	$result = Route::parseUrl($path, $depr);
         }
         var_dump($result);
-        exit;
+        return $result;
 	}
 
 }
