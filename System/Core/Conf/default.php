@@ -12,8 +12,6 @@ return [
     'action_prefix'      => false,
     // 操作方法后缀
     'action_suffix'          => '',
-    // 应用类库后缀
-    'class_suffix'           => 'Controller',
     // 控制器类后缀
     'controller_suffix'      => 'Controller',
     // 默认输出类型

@@ -21,6 +21,7 @@ if (file_exists($autoload)) {
 //应用启动
 \System\App::run();
 
+
 // $view = \System\View::instance();
 // // var_dump($view->twig);
 // $view->assign(array('name'=>'linrc'));

@@ -9,23 +9,12 @@ class App {
 
     public static $file = [];
 
+    public static $namespace = "Application";
+
     /**
      * @var bool 应用类库后缀
      */
     public static $suffix = false;
-
-	// public static function run() {
-	// 	self::init();
-	// }
-
-	// public static function init() {
-	// 	//创建应用目录
-	// 	self::mkdir();
-	// 	self::initCommon();
-	// 	self::define_const();
-	// 	self::loadConfig();
-	// 	self::debug();
-	// }
 
 	public static function run(Request $request = null) {
 		$request = is_null($request) ? Request::instance() : $request;
@@ -43,7 +32,6 @@ class App {
 			if (empty($dispatch)) {
 				$dispatch = self::routeCheck($request, $config);
 			}
-            var_dump($dispatch);
 			$request->dispatch($dispatch);
 			//执行应用
 			$data = self::exec($dispatch, $config);
@@ -139,7 +127,129 @@ class App {
      * @return  mixed
      */
     public static function exec($dispatch, $config) {
+        var_dump($dispatch);
+        switch ($dispatch['type']) {
+            case 'redirect':
+                $data = Response::create($dispatch['url'], 'redirect')->code($dispatch['status']);
+                break;
 
+            case 'application':
+                $data = self::application($dispatch['application'], $config);
+                break;
+        }
+    }
+
+    /**
+     * 执行应用
+     * @param  array $application controller/action
+     * @param  array  $config      config
+     * @return mixed
+     */
+    public static function application($application, $config = array()) {
+        if (is_string($application)) {
+            $application = explode("/", $application);
+        }
+        $request = Request::instance();
+
+        $request->filter($config['default_filter']);
+        $controller = strip_tags($application[0]) ?: $config['default_controller'];
+        $action = strip_tags($application[1]) ?: $config['default_action'];
+        self::Controller($controller, $config['controller_suffix'], $config['empty_controller']);
+    }
+
+    /**
+     * 定义控制器
+     * @param string $controller        空控制器名称
+     * @param string $controller_suffix 控制器前缀
+     * @param string $empty_controller  空控制器
+     */
+    public static function Controller($controller, $controller_suffix, $empty_controller = '') {
+        $namespace = self::$namespace . "\\Controller\\";
+
+        if (!empty($controller_suffix)) {
+            $controller= $namespace . self::ucFirst($controller) . self::ucFirst($controller_suffix);
+            $empty = $namespace . self::ucFirst($empty_controller) . self::ucFirst($controller_suffix);
+        }
+        if (class_exists($controller)) {
+            return self::invokeClass($controller);
+        } elseif (class_exists($empty)) {
+            return self::invokeClass($empty);
+        }
+        throw new \Exception("class not exist");
+    }
+
+    /**
+     * [invokeClass description]
+     * @param  [type] $class [description]
+     * @param  array  $vars   [description]
+     * @return [type]        [description]
+     */
+    public static function invokeClass($class, $vars = []) {
+        $reflect = new \ReflectionClass($class);
+        $constructor = $reflect->getConstructor();
+        $args = $constructor ? self::bindParams($constructor, $vars) : [];
+    }
+
+    /**
+     * 参数绑定
+     * @param  [type] $reflcet [description]
+     * @param  array  $vars    [description]
+     * @return [type]          [description]
+     */
+    public static function bindParams($reflcet, $vars = []) {
+        if (empty($vars)) {
+            Request::instance()->route();
+        }
+        $args = [];
+        if ($reflcet->getNumberOfParameters() > 0) {
+            reset($vars);
+            $type = key($vars) === 0 ? 1 : 0;
+            foreach ($reflect->getParameters() as $param) {
+                $args[] = self::getParamValue($param,$vars, $type);
+            }
+        }
+    }
+
+    /**
+     * 获取参数值
+     * @param  [type] $param [description]
+     * @param  [type] $vars  [description]
+     * @param  [type] $type  [description]
+     * @return [type]        [description]
+     */
+    public static function getParamValue($param, &$vars, $type) {
+        $name = $param->getName();
+        $class = $param->getClass();
+        if ($class) {
+            $className = $class->getName();
+            if (method_exists($className, 'invoke')) {
+                $method = new \ReflectionMethod($className, 'invoke');
+                if ($method->isPublic() && $method->isStatic()) {
+                    return $className::invoke(Request::instance());
+                }
+            }
+            $result = method_exists($className, 'instance') ?
+            $className::instance() :
+            new $className;
+        } elseif (1 == $type && !empty($vars)) {
+            $result = array_shift($vars);
+        } elseif (0 == $type && isset($vars[$name])) {
+            $result = $vars[$name];
+        } elseif ($param->isDefaultValueAvailable()) {
+            $result = $param->getDefaultValue();
+        } else {
+            throw new \InvalidArgumentException('method param miss:' . $name);
+        }
+        return $result;
+    }
+
+    /**
+     * 首字母大写
+     * @param  string $string
+     * @return string
+     */
+    public static function ucFirst($string) {
+        return ucfirst(strtolower($string));
     }
     /**
      * 调度信息
@@ -163,7 +273,6 @@ class App {
         if (false === $result) {
         	$result = Route::parseUrl($path, $depr);
         }
-        var_dump($result);
         return $result;
 	}
 

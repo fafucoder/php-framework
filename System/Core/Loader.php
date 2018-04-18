@@ -136,21 +136,22 @@ class Loader
 				return self::$loaded_class[$class];
 			}
 		}
-		
 
 		if(false !== strrpos($class, "\\")) {
 			foreach (self::$namespaces as $namespace => $dir) {
 				if (strpos($class, $namespace . '\\') === 0) {
 					$file = $dir . str_replace("\\",DIRECTORY_SEPARATOR,substr($class,strlen($namespace))) . '.php';
+					if (self::fileExists($file)) {
+						return $file;
+					}
 				}
-				if (self::fileExists($file)) {
-					return $file;
-				}
+
 			}
 		}
 
 		if (false !== strrpos($class, "\\")) {
 			$file = str_replace("\\",DIRECTORY_SEPARATOR,$class).'.php';
+			var_dump($file);
 			if (self::fileExists($file)) {
 				return $file;
 			}

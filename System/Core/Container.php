@@ -9,7 +9,6 @@ class Container extends Injector {
      * @var array
      */
     protected $_services = array();
-
     /**
      * Stores the shared service instance.
      *

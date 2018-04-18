@@ -73,7 +73,7 @@ if (!function_exists('load_config')) {
 	 * @return mixed
 	 */
 	function load_config($file, $type = "") {
-		$files = CONF_PATH . pathinfo($file, PATHINFO_FILENAME) . !empty($type) ? $type : EXT);
+		$files = CONF_PATH . pathinfo($file, PATHINFO_FILENAME) . !empty($type) ? $type : EXT;
 		if (file_exists($files)) {
 			return include($files);
 		}
