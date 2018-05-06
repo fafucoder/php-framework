@@ -1,1 +1,4 @@
 <?php
+return [
+	'head' => 'admin',
+];

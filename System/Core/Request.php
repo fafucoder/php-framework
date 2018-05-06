@@ -65,7 +65,7 @@ class Request {
      * 当前调度信息
      * @var [type]
      */
-    protected $dispatch = [];
+    public $dispatch = [];
     /**
      * 当前控制器
      * @var string
@@ -560,7 +560,7 @@ class Request {
      * @return array           调度信息
      */
     public function dispatch($dispatch) {
-        if (is_null($dispatch)) {
+        if (!is_null($dispatch)) {
             $this->dispatch = $dispatch;
         }
         return $this->dispatch;
@@ -576,7 +576,7 @@ class Request {
             $this->controller = $controller;
             return $this;
         } else {
-            return $this->controller ?: '';
+            return $this->controller ? $this->controller : '';
         }
     }
 
@@ -585,12 +585,12 @@ class Request {
      * @param  string $action
      * @return
      */
-    public function action($action = '') {
+    public function action($action = null) {
         if (!is_null($action)) {
             $this->action = $action;
             return $this;
         } else {
-            return $this->action ?: '';
+            return $this->action ? $this->action : '';
         }
     }
 

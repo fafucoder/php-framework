@@ -151,7 +151,6 @@ class Loader
 
 		if (false !== strrpos($class, "\\")) {
 			$file = str_replace("\\",DIRECTORY_SEPARATOR,$class).'.php';
-			var_dump($file);
 			if (self::fileExists($file)) {
 				return $file;
 			}

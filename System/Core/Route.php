@@ -784,6 +784,7 @@ class Route {
         $method           = Request::instance()->method();
         // 设置当前请求的路由变量
         Request::instance()->route($var);
+        Request::instance()->controller($controller)->action($action);
         // 路由到/控制器/操作
         return ['type' => 'application', 'application' => [$controller, $action], 'convert' => false];
     }
@@ -831,6 +832,7 @@ class Route {
         self::parseUrlParams(empty($path) ? '' : implode('|', $path));
         // 封装路由
         $route = [$controller, $action];
+        Request::instance()->controller($controller)->action($action);
         return ['type'=> 'application', 'application' => $route];
     }
 

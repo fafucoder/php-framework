@@ -173,11 +173,25 @@ class View {
 	public function registerGlobal() {
 		$setting_file = CONF_PATH . 'setting.php';
 		if (file_exists($setting_file)) {
-			$settings = include_once($setting_file);
-			foreach ($settings as $name => $value) {
-				$this->data[$name] = $value;
+			$settings = include($setting_file);
+			if (is_array($settings)) {
+				foreach ($settings as $name => $value) {
+					$this->data[$name] = $value;
+				}
 			}
 		}
+	}
+
+	/**
+	 * 获取数据
+	 * @param  string $name 名称
+	 * @return mixed       
+	 */
+	public function get($name = '') {
+		if ('' === $name) {
+			return $this->data;
+		}
+		return isset($this->data[$name]) ? $this->data[$name] : false;
 	}
 
 	public function __set($name, $value) {

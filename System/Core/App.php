@@ -97,9 +97,9 @@ class App {
 	 */
 	public static function defineConst() {
 		$home = base_url();
-		define("__HOME__",$home);
-		define("__ROOT__",dirname(__HOME__) . SP );
-		define("__PUBLIC__",PUBLIC_PATH);
+		define("HOME",$home);
+		define("ROOT",dirname(HOME) . SP );
+		define("PUBLIC",PUBLIC_PATH);
 	}
 
 
@@ -127,12 +127,10 @@ class App {
      * @return  mixed
      */
     public static function exec($dispatch, $config) {
-        var_dump($dispatch);
         switch ($dispatch['type']) {
             case 'redirect':
                 $data = Response::create($dispatch['url'], 'redirect')->code($dispatch['status']);
                 break;
-
             case 'application':
                 $data = self::application($dispatch['application'], $config);
                 break;
@@ -154,7 +152,24 @@ class App {
         $request->filter($config['default_filter']);
         $controller = strip_tags($application[0]) ?: $config['default_controller'];
         $action = strip_tags($application[1]) ?: $config['default_action'];
-        self::Controller($controller, $config['controller_suffix'], $config['empty_controller']);
+        try {
+        	$instance = self::Controller($controller, $config['controller_suffix'], $config['empty_controller']);
+        } catch (Exception $e) {
+        	throw new \Exception(sprintf("Controller not exists:%s", $e->getClass()),404);
+        }
+
+        $action = $action . $config['action_suffix'];
+        if (is_callable([$instance, $action])) {
+        	$call = new Executable([$instance, $action]);
+        } elseif (is_callable([$instance, '_empty'])) {
+        	$call = new Executable([$instance,'_empty']);
+        } else {
+        	throw new \Exception(sprintf("method not exists %s", get_class($instance) . '->' . $action), 404);
+        }
+        $request->dispatch($application);
+        $flection = $call->getReflection();
+        $params = self::bindParams($flection);
+        return $call->invokeArgs($params);
     }
 
     /**
@@ -188,26 +203,28 @@ class App {
         $reflect = new \ReflectionClass($class);
         $constructor = $reflect->getConstructor();
         $args = $constructor ? self::bindParams($constructor, $vars) : [];
+        return $reflect->newInstanceArgs($args);
     }
 
     /**
      * 参数绑定
-     * @param  [type] $reflcet [description]
+     * @param  [type] $reflect [description]
      * @param  array  $vars    [description]
      * @return [type]          [description]
      */
-    public static function bindParams($reflcet, $vars = []) {
+    public static function bindParams($reflect, $vars = []) {
         if (empty($vars)) {
-            Request::instance()->route();
+            $vars = Request::instance()->route();
         }
         $args = [];
-        if ($reflcet->getNumberOfParameters() > 0) {
+        if ($reflect->getNumberOfParameters() > 0) {
             reset($vars);
             $type = key($vars) === 0 ? 1 : 0;
             foreach ($reflect->getParameters() as $param) {
                 $args[] = self::getParamValue($param,$vars, $type);
             }
         }
+        return $args;
     }
 
     /**
@@ -222,15 +239,13 @@ class App {
         $class = $param->getClass();
         if ($class) {
             $className = $class->getName();
-            if (method_exists($className, 'invoke')) {
-                $method = new \ReflectionMethod($className, 'invoke');
-                if ($method->isPublic() && $method->isStatic()) {
-                    return $className::invoke(Request::instance());
-                }
-            }
-            $result = method_exists($className, 'instance') ?
-            $className::instance() :
-            new $className;
+	        if (method_exists($className, 'invoke')) {
+	            $method = new \ReflectionMethod($className, 'invoke');
+	                if ($method->isPublic() && $method->isStatic()) {
+	                    return $className::invoke(Request::instance());
+	                }
+	        }
+	       	$result = method_exists($className, 'instance') ? $className::instance() : new $className;
         } elseif (1 == $type && !empty($vars)) {
             $result = array_shift($vars);
         } elseif (0 == $type && isset($vars[$name])) {
@@ -273,6 +288,7 @@ class App {
         if (false === $result) {
         	$result = Route::parseUrl($path, $depr);
         }
+        
         return $result;
 	}
 
