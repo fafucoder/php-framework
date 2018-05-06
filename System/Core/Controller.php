@@ -113,24 +113,25 @@ class Controller {
 	 */
 	public function display($templateFile = '', $data = array(), $layout = true) {
 		//判断是否有模板文件入股没有模板文件则获取当前类和方法
-		if (!$templateFile) {
+		if (empty($templateFile)) {
 			$request = Request::instance();
-			$templateFile = implode("/", $request->dispatch);
-			$templateFile .= "." . Config::get('template.view_suffix');
+			$controller = $request->controller();
+			$view = $request->action();
+			$templateFile = $controller . SP . $view . "." . Config::get('template.view_suffix');
 		}
 		$content = $this->view->display($templateFile, $data, $layout);
-		$this->render($content);
+		return $this->render($content);
 	}
 
 	public function show($templateFile = '', $data = array()) {
 		//判断是否有模板文件入股没有模板文件则获取当前类和方法
 		if (!$templateFile) {
 			$request = Request::instance();
-			$templateFile = implode("/", $request->dispatch);
+			$templateFile = implode("/", $request->dispatch['application']);
 			$templateFile .= "." . Config::get('template.view_suffix');
 		}
 		$content = $this->view->show($templateFile, $data);
-		$this->render($content);
+		return $this->render($content);
 	}
 
 	/**
@@ -142,13 +143,14 @@ class Controller {
 		$content = preg_replace_callback(
 			"/{__(\w+)__}/", 
 			function($match) {
+
 				if (defined($match[1])) {
 					return constant($match[1]);
 				}
 				return $m;
 			},
 		$content);
-		echo $content;
+		return $content;
 	}
 	/**
 	 * 变量赋值

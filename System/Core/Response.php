@@ -90,6 +90,7 @@ class Response {
      */
     public function send() {
         $data = $this->getContent();
+
         if (!headers_sent() && !empty($this->header)) {
             http_response_code($this->code);
             foreach ($this->header as $name => $val) {

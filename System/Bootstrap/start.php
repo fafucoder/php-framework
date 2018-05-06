@@ -19,7 +19,7 @@ if (file_exists($autoload)) {
 }
 
 //应用启动
-\System\App::run();
+\System\App::run()->send();
 
 
 // $view = \System\View::instance();

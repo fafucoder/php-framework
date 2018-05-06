@@ -35,10 +35,21 @@ class App {
 			$request->dispatch($dispatch);
 			//执行应用
 			$data = self::exec($dispatch, $config);
-
 		} catch (Exception $e) {
 			return $e->getMessage();
 		}
+
+        if ($data instanceof Response) {
+            $response = $data;
+        } elseif (!is_null($data)) {
+            $type = $request->isAjax() ?
+            Config::get('default_ajax_return') :
+            Config::get('default_return_type');
+            $response = Response::create($data, $type);
+        } else {
+            $response = Response::create();
+        }
+        return $response;
 	}
 
 	//加载 common
@@ -96,10 +107,17 @@ class App {
 	 * @return void
 	 */
 	public static function defineConst() {
-		$home = base_url();
-		define("HOME",$home);
-		define("ROOT",dirname(HOME) . SP );
-		define("PUBLIC",PUBLIC_PATH);
+        if (!defined('_PHP_FILE_')) {
+            define('_PHP_FILE_',    rtrim($_SERVER['SCRIPT_NAME'],'/'));
+        }
+        if(!defined('ROOT')) {
+            $_root  =   rtrim(dirname(_PHP_FILE_),'/');
+            define('ROOT',  (($_root=='/' || $_root=='\\')?'':$_root));
+        }
+        if (!defined('PUBLIC')) {
+            $public = ROOT . '/Public';
+            define("PUBLIC",$public);
+        }	
 	}
 
 
@@ -135,6 +153,7 @@ class App {
                 $data = self::application($dispatch['application'], $config);
                 break;
         }
+        return $data;
     }
 
     /**
