@@ -135,16 +135,16 @@ class Route {
 
 	/**
 	 * 获取或者批量设置路由
-	 * @param  mixed $rule 请求类型或者定义数组
+	 * @param  mixed $rules 请求类型或者定义数组
 	 * @return array
 	 */
-	public static function rules($rule = '') {
+	public static function rules($rules = '') {
 		if (is_array($rules)) {
 			self::$rules = $rules;
 		} elseif ($rules) {
 			return true === $rules ? self::$rules : self::$rules[strtolower($rules)];
 		} else {
-			$rules = self:: $rules;
+			$rules = self::$rules;
 			unset($rules['patten'], $rules['alias'], $rules['name']);
 			return $rules;
 		}

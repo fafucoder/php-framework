@@ -4,14 +4,22 @@ namespace System;
 class Url {
 	public static $root;
 
-	public static function build($url = '', $vars = '', $suffix = true ) {
-		if (0 === strpos($url, '[') && strpos($url, ']')) {
-			$name = substr($url, 1 $pos - 1);
+    /**
+     * 生成url
+     * @param  string  $url    url
+     * @param  string  $vars   参数
+     * @param  boolean $suffix 是否伪静态后缀
+     * @param  boolean $domain 是否生成域名   
+     * @return string
+     */
+	public static function build($url = '', $vars = '', $suffix = true) {
+		if (0 === strpos($url, '[') && $pos = strpos($url, ']')) {
+			$name = substr($url, 1, $pos - 1);
 			$url = 'name' . substr($url, $pos + 1);
 		}
-		if (false === strpos($url, "://") && 0 != strpos($url, "/")) {
+		if (false === strpos($url, "://") && 0 !== strpos($url, "/")) {
 			$info = parse_url($url);
-			$url = !empty($info['path']) ?: "";
+			$url = !empty($info['path']) ? $info['path'] : "";
 			if (isset($info['fragment'])) {
 				$anchor = $info['fragment'];
 				if (false !== strpos($anchor, "?")) {
@@ -29,7 +37,7 @@ class Url {
 		}
 
 		if ($url) {
-			$rule = Route::aname(isset($name) ? $name : $url . (isset($info['query']) ? "?" . $info['query'] : ""));
+			$rule = Route::name(isset($name) ? $name : $url . (isset($info['query']) ? "?" . $info['query'] : ""));
 			if (is_null($rule) && isset($info['query'])) {
 				$rule = Route::name($url);
 				// 解析地址里面参数 合并到vars
@@ -38,6 +46,7 @@ class Url {
                 unset($info['query']);
 			}
 		}
+
 		if (!empty($rule) && $match = self::getRuleUrl($rule, $vars)) {
 			// 匹配路由命名标识
             $url = $match[0];
@@ -74,26 +83,29 @@ class Url {
                 parse_str($info['query'], $params);
                 $vars = array_merge($params, $vars);
             }
-            // 还原URL分隔符
-	        $depr = Config::get('app.pathinfo_depr');
-	        $url  = str_replace('/', $depr, $url);
-
-	        // URL后缀
-        	$suffix = in_array($url, ['/', '']) ? '' : self::parseSuffix($suffix);
-        	 // 锚点
-       		$anchor = !empty($anchor) ? '#' . $anchor : '';
-       		// 参数组装
-	        if (!empty($vars)) {
-	            foreach ($vars as $var => $val) {
-	                if ('' !== trim($val)) {
-                        $url .= $depr . $var . $depr . urlencode($val);
-	                }
-	                $url .= $suffix . $anchor;
-	            }
-	        } else {
-	            $url .= $suffix . $anchor;
-	        }
         }
+
+        // 还原URL分隔符
+        $depr = Config::get('pathinfo_depr');
+        $url  = str_replace('/', $depr, $url);
+        // URL后缀
+        $suffix = in_array($url, ['/', '']) ? '' : self::parseSuffix($suffix);
+         // 锚点
+        $anchor = !empty($anchor) ? '#' . $anchor : '';
+        // 参数组装
+        if (!empty($vars)) {
+            foreach ($vars as $var => $val) {
+                if ('' !== trim($val)) {
+                    $url .= $depr . $var . $depr . urlencode($val);
+                }
+            }
+            $url .= $suffix . $anchor;
+        } else {
+            $url .= $suffix . $anchor;
+        }
+        // URL组装
+        $url = rtrim(self::$root ?: Request::instance()->root(), '/') . '/' . ltrim($url, '/');
+        return $url;
 	}
 
     /**
@@ -133,7 +145,7 @@ class Url {
     public static function parseSuffix($suffix)
     {
         if ($suffix) {
-            $suffix = true === $suffix ? Config::get('app.default_return_type') : $suffix;
+            $suffix = true === $suffix ? Config::get('default_return_type') : $suffix;
             if ($pos = strpos($suffix, '|')) {
                 $suffix = substr($suffix, 0, $pos);
             }

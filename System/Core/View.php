@@ -1,6 +1,8 @@
 <?php
 namespace System;
 
+use System\Library\TwigHelpers;
+
 class View {
 
 	/**
@@ -62,6 +64,15 @@ class View {
 		}
 		$this->twig_config['debug'] = $this->config['debug'];
 		$this->twig = new \Twig_Environment($loader, $this->twig_config);
+		$this->twig->addExtension(new TwigHelpers());
+		$this->twig->registerUndefinedFunctionCallback(function($name) {
+	    	if (function_exists($name)) {
+	        	return new \Twig_SimpleFunction($name, function() use($name) {
+	            return call_user_func_array($name, func_get_args());
+	        });
+   		 	}
+    		throw new \RuntimeException(sprintf('Function %s not found', $name));
+		});
 	}
 
 	/**

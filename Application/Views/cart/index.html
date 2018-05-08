@@ -1,0 +1,66 @@
+{{ include('cart/header.html') }}
+<!-- 购物车 -->
+<div class="cart-contianer">
+    <div class="have-cart-contianer">
+        <div class="have-cart-content">
+         {% for cart in cart_list %}
+            <ul class="clearfix">
+                <li class="img">
+                    <a href="sort.php?act=detail&&detail_id=<?php echo $value['gid']?>"><img src="<?php echo $value['img'] ?>"></a>
+                </li>
+                <li class="name">
+                    <a href="sort.php?act=detail&&detail_id=<?php echo $value['gid']?>"><p>{{cart.name}}</p></a>
+                    <div class="cart-reduce-add">
+                        <a href="cart.php?act=reduce&&gid=<?php echo $value['gid'];?>"><i class="iconfont icon-reduce" style="color:#c4c3c3;font-size: 18px;"></i></a>
+                        <span>{{cart.num}}</span>
+                        <a href="cart.php?act=add&&gid=<?php echo $value['gid'];?>"><i class="iconfont icon-icontianjia01" style="color:#EE2C2C ; font-size: 18px; text-align: center;"></i></a>
+                    </div>
+                </li>
+                <li class="price">
+                    <span>{{cart.price}}</span>
+                    <div class="del">
+                        <a href="cart.php?act=del&&gid=<?php echo $value['gid'];?>"><i class="iconfont icon-del"></i></a>
+                    </div>
+                </li> 
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="cart-operate">
+        <div class="operate-contianer clearfix">
+            <div class="all-choose">
+                <label><input type="radio" name=""><i class="iconfont icon-iconfont0095"></i></input>全选</label>
+            </div>
+            <div class="choose-price">
+                <div class="cart-img">
+                    <i class="iconfont icon-gouwucheover"></i>
+                    <span>{{cart_num}}</span>
+                </div>
+                <div class="all-price">
+                    合计:<i>￥</i><span>{{total_price}}</span>
+                </div>
+            </div>
+            <div class="go-to-account">
+                <a href="/changeapp/setting.php?act=pay">去结算</a>
+            </div>
+        </div>
+    </div>
+            <?php
+                }else{
+            ?>
+    <div class="no-cart-contianer">
+        <div class="no-cart-img">
+            <i class="iconfont icon-gouwuche1"></i>
+        </div>
+        <div class="no-cart-content">
+            <h2>购物车为空</h2>
+            <p>您还没有选购商品</p>
+        </div>
+        <div class="no-cart-buy">
+            <a href="sort.php">去选购</a>
+        </div>
+    </div>
+            <?php
+                }
+            ?>
+</div>

@@ -119,17 +119,23 @@ class Controller {
 			$view = $request->action();
 			$templateFile = $controller . SP . $view . "." . Config::get('template.view_suffix');
 		}
+        $templateFile = strtolower($templateFile);
+        if(!pathinfo($templateFile, PATHINFO_EXTENSION)){
+            $templateFile .= "." . Config::get('template.view_suffix');
+        }
 		$content = $this->view->display($templateFile, $data, $layout);
 		return $this->render($content);
 	}
 
 	public function show($templateFile = '', $data = array()) {
 		//判断是否有模板文件入股没有模板文件则获取当前类和方法
-		if (!$templateFile) {
-			$request = Request::instance();
-			$templateFile = implode("/", $request->dispatch['application']);
-			$templateFile .= "." . Config::get('template.view_suffix');
-		}
+        if (empty($templateFile)) {
+            $request = Request::instance();
+            $controller = $request->controller();
+            $view = $request->action();
+            $templateFile = $controller . SP . $view . "." . Config::get('template.view_suffix');
+        }
+        $templateFile = strtolower($templateFile);
 		$content = $this->view->show($templateFile, $data);
 		return $this->render($content);
 	}

@@ -111,7 +111,7 @@ class Session {
 		empty(self::$init) && self::boot();
         if (strpos($name, '.')) {
             list($name1, $name2) = explode('.', $name);
-            return isset($_SESSION[$name1][$name2]):
+            return isset($_SESSION[$name1][$name2]);
         } else {
             return isset($_SESSION[$name]);
         }

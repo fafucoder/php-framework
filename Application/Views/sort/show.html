@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="http://at.alicdn.com/t/font_fm3u712m81q93sor.css">
+<!-- 头部 -->
+<div class="search-contianer">
+    <div class="search-box">
+        <div class="search-header">
+            <a href="javascript:void();" onclick="window.history.go(-1);">返回</a>
+            <span>筛选</span>
+            <p>搜索</p>
+        </div>
+    </div>
+    <!-- 搜索头部 -->
+    <div class="input-search">
+        <div class="search-window">
+            <i class="iconfont icon-sousuo-sousuo"></i>
+            <a href="search.php"><input type="text" placeholder="搜索你想要的食物" /></a>
+        </div>
+    </div>
+    <div class="choose-itme clearfix">
+        <div class="choose-new-item">
+            <span>新品</span>
+            <i class="iconfont icon-xiangxia" style="display:inline-block;color:#f00b0b;"></i>
+            <div class="sanjiaoxing" style="display: block;"></div>
+        </div>
+        <div class="choose-xiaoliang">
+            <span>销量</span>
+            <i class="iconfont icon-xiangxia"></i>
+            <div class="sanjiaoxing"></div>
+        </div>
+        <div class="choose-price">
+            <span>价格</span>
+            <i class="iconfont icon-xiangxia"></i>
+            <div class="sanjiaoxing"></div>
+        </div>
+    </div>
+    <!-- 商品展示 -->
+    <div class="show-item">
+        <div class="show-item-content">
+            {% for value in sort %}
+            <ul>
+                <input type="hidden" id="gid" value="{{value['detail_id']}}" />
+                <li class="show-item-img">
+                    <a href="sort.php?act=detail&&detail_id={{value['detail_id']}}"><img src="{__PUBLIC__}/assets/images/change/{{value['goods_img']}}"></a>
+                </li>
+                <li class="operate clearfix">
+                    <div class="name">
+                        <a href="sort.php?act=detail&&detail_id={{ value['detail_id']}}"><p>{{ value['goods_name']}}</p></a>
+                    </div>
+                    <div class="address">
+                        <p>产地：<span>{{ value['goods_made'] }}</span></p>
+                    </div>
+                    <div class="price">
+                        <span>{{ value['goods_price'] }}</span>
+                        <i class="iconfont icon-tianjiadaogouwuche buy"></i>
+                    </div>
+                </li> 
+            </ul>
+            {% endfor %}
+        </div>
+    </div>
+</div>

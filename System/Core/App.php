@@ -188,6 +188,7 @@ class App {
         $request->dispatch($application);
         $flection = $call->getReflection();
         $params = self::bindParams($flection);
+        Session::init();
         return $call->invokeArgs($params);
     }
 
@@ -204,6 +205,9 @@ class App {
             $controller= $namespace . self::ucFirst($controller) . self::ucFirst($controller_suffix);
             $empty = $namespace . self::ucFirst($empty_controller) . self::ucFirst($controller_suffix);
         }
+        // var_dump($controller);
+        // $controller = 'Application\Controller\CartController';
+        // var_dump(class_exists($controller));exit;
         if (class_exists($controller)) {
             return self::invokeClass($controller);
         } elseif (class_exists($empty)) {
