@@ -70,7 +70,8 @@ class Controller {
 				$params = explode(",", $options['params']);
 			}
 		}
-		call_user_func_array(array($this, $action), isset($params) ? $params : []);
+		return call_user_func_array(array($this, $action), isset($params) ? $params : []);
+
 	}
 
 	/**
@@ -136,6 +137,9 @@ class Controller {
             $templateFile = $controller . SP . $view . "." . Config::get('template.view_suffix');
         }
         $templateFile = strtolower($templateFile);
+        if(!pathinfo($templateFile, PATHINFO_EXTENSION)){
+            $templateFile .= "." . Config::get('template.view_suffix');
+        }
 		$content = $this->view->show($templateFile, $data);
 		return $this->render($content);
 	}
