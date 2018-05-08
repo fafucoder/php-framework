@@ -39,11 +39,12 @@
             <ul>
                 <input type="hidden" id="gid" value="{{value['detail_id']}}" />
                 <li class="show-item-img">
-                    <a href="sort.php?act=detail&&detail_id={{value['detail_id']}}"><img src="{__PUBLIC__}/assets/images/change/{{value['goods_img']}}"></a>
+                    <a href='{{ url("Sort/detail")}}{{ "?did="}}{{value.detail_id}}'>
+                        <img src="{__PUBLIC__}/assets/images/change/{{value['goods_img']}}"></a>
                 </li>
                 <li class="operate clearfix">
                     <div class="name">
-                        <a href="sort.php?act=detail&&detail_id={{ value['detail_id']}}"><p>{{ value['goods_name']}}</p></a>
+                        <a href='{{ url("Sort/detail")}}{{ "?did="}}{{value.detail_id}}'><p>{{ value['goods_name']}}</p></a>
                     </div>
                     <div class="address">
                         <p>产地：<span>{{ value['goods_made'] }}</span></p>

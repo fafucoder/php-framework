@@ -169,15 +169,16 @@ class App {
         $request = Request::instance();
 
         $request->filter($config['default_filter']);
-        $controller = strip_tags($application[0]) ?: $config['default_controller'];
-        $action = strip_tags($application[1]) ?: $config['default_action'];
+        $controllers = strip_tags($application[0]) ? $application[0] : $config['default_controller'];
+        $actions = strip_tags($application[1]) ? $application[1] : $config['default_action'];
+
         try {
-        	$instance = self::Controller($controller, $config['controller_suffix'], $config['empty_controller']);
+        	$instance = self::Controller($controllers, $config['controller_suffix'], $config['empty_controller']);
         } catch (Exception $e) {
         	throw new \Exception(sprintf("Controller not exists:%s", $e->getClass()),404);
         }
 
-        $action = $action . $config['action_suffix'];
+        $action = $actions . $config['action_suffix'];
         if (is_callable([$instance, $action])) {
         	$call = new Executable([$instance, $action]);
         } elseif (is_callable([$instance, '_empty'])) {
@@ -188,6 +189,7 @@ class App {
         $request->dispatch($application);
         $flection = $call->getReflection();
         $params = self::bindParams($flection);
+        $request->controller($controllers)->action($actions);
         Session::init();
         return $call->invokeArgs($params);
     }
@@ -205,7 +207,6 @@ class App {
             $controller= $namespace . self::ucFirst($controller) . self::ucFirst($controller_suffix);
             $empty = $namespace . self::ucFirst($empty_controller) . self::ucFirst($controller_suffix);
         }
-        // var_dump($controller);
         // $controller = 'Application\Controller\CartController';
         // var_dump(class_exists($controller));exit;
         if (class_exists($controller)) {

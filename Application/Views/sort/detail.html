@@ -1,0 +1,86 @@
+<link rel="stylesheet" href="{__PUBLIC__}/assets/css/swiper.css">
+<!-- 头部 -->
+<div class="sign-login-contianer">
+  <div class="login-box">
+    <div class="login-header clearfix">
+      <a href="javascript:history.back();">返回</a>
+      <p>商品详情</p>
+      <a href="search.php" style="position: absolute;top:14px;right:10px;border: none;padding: 0px;"><i class="iconfont icon-sousuo-sousuo"></i></a>
+    </div>
+  </div>
+</div>
+<div class="show-cartinfo-contianer">
+    <div class="nav" style="height: 201px;overflow: hidden;">
+        <div class="swiper-container">
+            <div class="swiper-wrapper" >
+                <div class="swiper-slide"><img src="{__PUBLIC__}/assets/images/bg.jpg" alt=""></div>
+                <div class="swiper-slide"><img src="{__PUBLIC__}/assets/images/bg.jpg" alt=""></div>
+                <div class="swiper-slide"><img src="{__PUBLIC__}/assets/images/bg.jpg" alt=""></div>
+                <div class="swiper-slide"><img src="{__PUBLIC__}/assets/images/bg.jpg" alt=""></div>
+                <div class="swiper-slide"><img src="{__PUBLIC__}/assets/images/bg.jpg" alt=""></div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+    <div class="show-cartinfo-name">
+        <p> {{ detail['goods_name'] }}</p>
+        <p><span>{{detail['goods_price']}}</span>元</p>
+    </div>
+    <div class="show-cartinfo-operate clearfix">
+        <div class="save">
+            <a href=""><i class="iconfont icon-shoucang1"></i>收藏</a>
+        </div>
+        <div class="buy">
+            <a href=""><i class="iconfont icon-gouwuche1"></i>加入购物车</a>
+        </div>
+    </div>
+    <div class="detail-info">
+        <div class="detail-info-title">
+            <p>商品规格</p>
+            <i class="iconfont"></i>
+        </div>
+        <div class="detail-info-content">
+            <div class="clearfix detail-id">
+                <span>商品编号</span>：
+                <span>{{detail_id}}</span>
+            </div>
+            <div class="pinpai clearfix">
+                <span>品牌</span>：
+                <span>{{detail['goods_info']}}</span>
+            </div>
+            <div class="made-addr clearfix">
+                <span>产地</span>：
+                <span>{{detail['goods_made']}}</span>
+            </div>
+            <div class="weight clearfix">
+                <span>含净量</span>：
+                <span>{{detail['goods_weight']}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="detail-descript">
+        <div class="descript-title">
+            <p>商品详情</p>
+        </div>
+    </div>
+    <div class="detail-commend">
+        <div class="commend-title">
+            <p>全部评论</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{__PUBLIC__}/assets/js/swiper.min.js"></script>
+<script type="text/javascript">
+    var swiper = new Swiper('.swiper-container', {
+        pagination: '.swiper-pagination',
+        nextButton: '.swiper-button-next',
+        prevButton: '.swiper-button-prev',
+        paginationClickable: true,
+        spaceBetween:0,
+        centeredSlides: true,
+        autoplay:5000,
+        autoplayDisableOnInteraction: false
+    });
+</script>
