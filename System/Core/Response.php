@@ -27,6 +27,12 @@ class Response {
     public $code = 200;
 
     /**
+     * 输出类型
+     * @var string
+     */
+    public $type = '';
+
+    /**
      * 输出选项
      * @var array
      */
@@ -51,7 +57,7 @@ class Response {
      * @param array $header
      * @param array $options 输出参数
      */
-    public function __construct($data = '', $code = 200, array $header = [], $options = []) {
+    public function __construct($data = '', $type = '', $code = 200, array $header = [], $options = []) {
         $this->data($data);
         if (!empty($options)) {
             $this->options = array_merge($this->options, $options);
@@ -59,6 +65,7 @@ class Response {
         $this->contentType($this->contentType, $this->charset);
         $this->header = array_merge($this->header, $header);
         $this->code = $code;
+        $this->type = $type;
     }
 
     /**
@@ -68,19 +75,9 @@ class Response {
      * @param int    $code
      * @param array  $header
      * @param array  $options 输出参数
-     * @return Response|JsonResponse|ViewResponse|XmlResponse|RedirectResponse|JsonpResponse
      */
     public static function create($data = '', $type = '', $code = 200, array $header = [], $options = []) {
-        $type = empty($type) ? 'null' : strtolower($type);
-
-        $class = false !== strpos($type, '\\') ? $type : '\\think\\response\\' . ucfirst($type);
-        if (class_exists($class)) {
-            $response = new $class($data, $code, $header, $options);
-        } else {
-            $response = new static($data, $code, $header, $options);
-        }
-
-        return $response;
+        return new static($data, $type, $code, $header, $options);
     }
 
     /**
@@ -90,7 +87,6 @@ class Response {
      */
     public function send() {
         $data = $this->getContent();
-
         if (!headers_sent() && !empty($this->header)) {
             http_response_code($this->code);
             foreach ($this->header as $name => $val) {
@@ -101,9 +97,14 @@ class Response {
                 }
             }
         }
-
-        echo $data;
-
+        if ($this->type == 'json') {
+            echo json_encode($data);
+        } elseif ($this->type == 'jsonp') {
+            echo $_GET['jsoncallback'] . '(' . json_encode($data) .  ")";
+        } else {
+            echo $data;
+        }
+        ob_end_flush();
         if (function_exists('fastcgi_finish_request')) {
             // 提高页面响应
             fastcgi_finish_request();

@@ -281,28 +281,8 @@ class Controller {
         }
     }
 
-	public function ajax($data, $type = '', $json_option = 0) {
-		if (empty($type)) {
-			$type = Config::get('default_ajax_return');
-		}
-		switch (strtolower($type)) {
-			case 'json':
-				// 返回JSON数据格式到客户端 包含状态信息
-                header('Content-Type:application/json; charset=utf-8');
-                echo json_encode($data, $json_option);
-                break;
-			case 'xml':
-				break;
-			case 'jsonp':
-				header('Content-Type:application/json; charset=utf-8');
-				$handler = isset($_GET['jsonpcallback']) ? $_GET['jsonpcallback'] : '';
-				echo $handler . "(" . json_encode($data, $json_option) . ")";
-				break;
-			default:
-				header('Content-Type:application/json; charset=utf-8');
-                echo json_encode($data, $json_option);
-				break;
-		}
+	public function ajax($data, $type = 'json') {
+        return Response::create($data, $type);
 	}
 
     /**
