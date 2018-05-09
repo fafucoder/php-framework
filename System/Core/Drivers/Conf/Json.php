@@ -1,11 +1,9 @@
 <?php
 
-namespace System\Drivers\ParseConf;
+namespace System\Drivers\Conf;
 
-class Json
-{
-    public function parse($config)
-    {
+class Json implements Adapter {
+    public function parse($config) {
         if (is_file($config)) {
             $config = file_get_contents($config);
         }

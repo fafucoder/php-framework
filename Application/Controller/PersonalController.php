@@ -10,7 +10,7 @@ class PersonalController extends Controller {
         'login' => array(),
     );
 
-    public function index(){
+    public function index() {
         
     }
 

@@ -39,7 +39,8 @@ class Controller {
 		}
 	}
 
-	public function _init(){
+	public function _init() {
+		
 	}
 
 	/**

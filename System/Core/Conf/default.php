@@ -103,19 +103,19 @@ return [
     // +-----------------------------------------------------------------
     'database'            => [
         // 数据库类型
-        'database_type'            => 'mysql',
+        'database_type'   => 'mysql',
         // 数据库连接DSN配置
-        'database_dsn'             => [],
+        'database_dsn'    => [],
         // 服务器地址
-        'server'        => '127.0.0.1',
+        'server'          => '127.0.0.1',
         // 数据库名
-        'database_name'        => 'cosphp',
+        'database_name'   => '',
         // 数据库用户名
-        'username'        => 'root',
+        'username'        => '',
         // 数据库密码
-        'password'        => 'toor',
+        'password'        => '',
         // 数据库连接端口
-        'port'        => '',
+        'port'            => '',
         // 数据库编码默认采用utf8
         'charset'         => 'utf8',
         // 数据库表前缀

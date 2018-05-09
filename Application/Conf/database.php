@@ -1,5 +1,4 @@
 <?php
-
 return [
     // 数据库类型
     'database_type'            => 'mysql',

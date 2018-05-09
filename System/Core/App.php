@@ -21,10 +21,13 @@ class App {
 		try {
 			//创建应用目录
 			Build::checkDir();
+            // echo "hello";exit;
 			//加载公共文件
 			self::initCommon();
+            // echo "hellos";exit;
 			//加载常量
 			self::defineConst();
+            // echo "hello";exit;
 			//加载配置
 			$config = self::loadConfig();
 			//信息调度
@@ -71,9 +74,9 @@ class App {
 	 * @return null
 	 */
 	public static function loadConfig() {
+        ini_set('error_reporting',E_ALL);
 		$sys_config = CORE_PATH . 'Conf/default.php';
 		Config::load($sys_config);
-
 		$app_config = ['config','database'=>'database'];
 		foreach ($app_config as $name => $file) {
 			if (is_numeric($name)) {
@@ -83,7 +86,7 @@ class App {
 			}
 		}
 		//load extra config
-		$extra_file = Config::get('app.extra_file_list');
+		$extra_file = Config::get('extra_file_list');
 		if (!empty($extra_file)) {
 			foreach ($extra_file as $filename) {
 				$file = strpos($file, ".") ? $filename : APP_PATH . $filename . EXT;
@@ -98,7 +101,6 @@ class App {
 		if (file_exists($environment_config)) {
 			Config::load($environment_config);
 		}
-
 		return Config::get();
 	}
 
@@ -153,6 +155,7 @@ class App {
                 $data = self::application($dispatch['application'], $config);
                 break;
         }
+
         return $data;
     }
 
@@ -207,8 +210,6 @@ class App {
             $controller= $namespace . self::ucFirst($controller) . self::ucFirst($controller_suffix);
             $empty = $namespace . self::ucFirst($empty_controller) . self::ucFirst($controller_suffix);
         }
-        // $controller = 'Application\Controller\CartController';
-        // var_dump(class_exists($controller));exit;
         if (class_exists($controller)) {
             return self::invokeClass($controller);
         } elseif (class_exists($empty)) {

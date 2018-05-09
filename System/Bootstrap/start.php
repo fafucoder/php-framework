@@ -19,5 +19,6 @@ if (file_exists($autoload)) {
 	require ROOT_PATH . 'vendor/autoload.php';
 }
 
+// echo "hello world";exit;
 //应用启动
 \System\App::run()->send();

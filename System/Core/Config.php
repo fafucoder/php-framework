@@ -1,18 +1,39 @@
 <?php
-
 namespace System;
 
 class Config {
     /**
      * List all config
      */
-    protected static $config = array();
-
+    public static $config = array();
 
     /**
      * container of config path
      */
     public static $config_path = array(CONF_PATH);
+
+    /**
+     * 加载配置文件
+     * 
+     * @param  string $file [description]
+     * @param  string $name [description]
+     * @param  string $type [description]
+     * @return [type]       [description]
+     */
+    public static function load($file = '', $name = '', $type= '') {
+        if (file_exists($file)) {
+            self::parse($file, $name, $type);
+        } else {
+            $filename = pathinfo($file, PATHINFO_FILENAME);
+            $file = is_file($file) ? $file : $filename . CONF_EXT;
+            $files = self::findFile($file);
+            if (!empty($files)) {
+                foreach ($files as $file) {
+                    self::parse($file, $name, $type);
+                }
+            }
+        }
+    }
 
     /**
      * 解析配置文件或内容
@@ -21,43 +42,43 @@ class Config {
      * @param  string $name   配置名（如设置即表示二级配置）
      * @return mixed
      */
-    public static function parse($file, $name = '', $type = '') {
+    public static function parse($file= '', $name = '', $type = '') {
         if (empty($type)) {
-            $type = pathinfo($file, PATHINFO_EXTENSION);
+            $type = 'php';
         }
-        if ($type == 'php') {
-            return self::set(include $file, $name);
-        }
-        $class = false !== strpos($type, '\\') ?
-            $type :
-            '\\System\\Drivers\\ParseConf\\' . ucwords($type);
-        return self::set((new $class())->parse($config), $name);
+        $type = "\\System\\Drivers\\Conf\\" . ucfirst($type);
+        $Adapter = new $type();
+        $content = $Adapter->parse($file);
+        self::set($content, $name);
     }
 
     /**
-     * 加载配置文件  
-     * @param  string $file 文件名
-     * @param  string $name 配置名
+     * 设置配置参数 name 为数组则为批量设置
+     * @access public
+     * @param  string|array $name  配置参数名（支持二级配置 . 号分割）
+     * @param  mixed        $value 配置值
      * @return mixed
-     * @TODO
-     */                 
-    public static function load($file='', $name = "",$type = '') {
-        if (file_exists($file)) {
-            $config = self::parse($file, $name);
-            return $config;
+     */
+    public static function set($name, $value = null) {
+        // 字符串则表示单个配置设置
+        if (is_string($name)) {
+            if (!strpos($name, '.')) {
+                self::$config[strtolower($name)] = $value;
+            } else {
+                // 二维数组
+                $name = explode('.', $name, 2);
+                self::$config[strtolower($name[0])][$name[1]] = $value;
+            }
         }
 
-        $filename= pathinfo($file, PATHINFO_FILENAME);
-        $file = is_file($file) ? $file : $filename .CONF_EXT;
-
-        if (!empty($files = self::findFile($file))) {
-            foreach ($files as $f) {
-                $config = self::parse($f, $name);
+        // 数组则表示批量设置
+        if (is_array($name)) {
+            if (!empty($value)) {
+                self::$config[$value] = isset(self::$config[$value]) ? array_merge(self::$config[$value], $name) : $name;
+            } else {
+                self::$config = array_merge(self::$config, array_change_key_case($name));
             }
-            return $config;
-        } 
-        throw new \Exception("config file not found");
-        
+        }
     }
 
     public static function has($name) {
@@ -70,50 +91,11 @@ class Config {
     }
 
     /**
-     * 设置配置参数 name 为数组则为批量设置
-     * @access public
-     * @param  string|array $name  配置参数名（支持二级配置 . 号分割）
-     * @param  mixed        $value 配置值
-     * @return mixed
-     */
-    public static function set($name, $value = null ) {
-        // 字符串则表示单个配置设置
-        if (is_string($name)) {
-            if (!strpos($name, '.')) {
-                self::$config[strtolower($name)] = $value;
-            } else {
-                // 二维数组
-                $name = explode('.', $name, 2);
-                self::$config[strtolower($name[0])][$name[1]] = $value;
-            }
-            return $value;
-        }
-
-        // 数组则表示批量设置
-        if (is_array($name)) {
-            if (!empty($value)) {
-                self::$config[$value] = isset(self::$config[$value]) ?
-                    array_merge(self::$config[$value], $name) :
-                    $name;
-                return self::$config[$value];
-            }
-
-            return self::$config = array_merge(
-                self::$config, array_change_key_case($name)
-            );
-        }
-
-        return self::$config;
-
-    }
-
-    /**
      * 获取特定的值
      * @param  string $name key
      * @return string|null   
      */
     public static function get($name = "") {
-
         if (empty($name)) {
             return self::$config;
         }
@@ -122,13 +104,10 @@ class Config {
             $name = strtolower($name);
             return isset(self::$config[$name]) ? self::$config[$name] : null;
         }
-
         // 二维数组设置和获取支持
         $name    = explode('.', $name, 2);
         $name[0] = strtolower($name[0]);
-        return isset(self::$config[$name[0]][$name[1]]) ?
-            self::$config[$name[0]][$name[1]] :
-            null;
+        return isset(self::$config[$name[0]][$name[1]]) ? self::$config[$name[0]][$name[1]] : null;
     }
 
     /**
@@ -137,7 +116,6 @@ class Config {
      */
     public static function clear() {
         self::$config = array();
-        self::$is_load= array();
     }
 
 
@@ -170,7 +148,8 @@ class Config {
     }
 
     /**
-     * get config path
+     * Fet config path
+     * 
      * @return array|null
      */
     public static function getConfigPath() {

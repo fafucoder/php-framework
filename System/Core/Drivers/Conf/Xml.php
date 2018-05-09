@@ -1,11 +1,8 @@
 <?php
+namespace System\Drivers\Conf;
 
-namespace System\Drivers\ParseConf;
-
-class Xml
-{
-    public function parse($config)
-    {
+class Xml implements Adapter{
+    public function parse($config) {
         if (is_file($config)) {
             $content = simplexml_load_file($config);
         } else {

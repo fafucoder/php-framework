@@ -23,7 +23,6 @@ class Error {
      * @return void
      */
     public static function error_handler($errno, $error, $file, $line) {
-        var_dump($errno, $error, $file, $line);
         if (!self::isFatal($errno)) {
             ob_end_clean();
             $errorStr = "[$errno] $error " .$file. " 第 $line 行.";
@@ -83,27 +82,17 @@ class Error {
         exit;
     }
 
-    /**
-     * 显示错误
-     * @return void
-     * @todo
-     */
-    public static function show_error() {
-        echo "页面升级中～！";
-        exit;
-    }
-
-    /**
-     * 显示404
-     * @return void
-     */
-    public static function show_404() {
-        $heading = '404 Page Not Found';
-        $message = 'The page you requested was not found.';
-        $error_templete = CORE_PATH . 'Templete/error_404.php';
-        include $error_templete;
-        exit;
-    }
+    // /**
+    //  * 显示404
+    //  * @return void
+    //  */
+    // public static function show_404() {
+    //     $heading = '404 Page Not Found';
+    //     $message = 'The page you requested was not found.';
+    //     $error_templete = CORE_PATH . 'Templete/error_404.php';
+    //     include $error_templete;
+    //     exit;
+    // }
 
     public static function halt($error) {
         $debug = defined("DEBUG") ? DEBUG : Config::get('debug');
