@@ -2,11 +2,12 @@
     "name": "miniphp",
     "description": "simple php framework",
     "type": "framework",
-    "keywords": ["php","mini","miniphp"],
+    "keywords": ["php","miniphp"],
     "require": {
         "php": ">=5.4.0",
-        "filp/whoops": "*",
+        "filp/whoops": "~2.0",
         "symfony/var-dumper":"*",
-        "twig/twig":"*"
+        "psr/http-message": "^1.0",
+        "twig/twig":"~2.0",
     }
 }
