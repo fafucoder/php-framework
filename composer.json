@@ -1,5 +1,6 @@
 {
-    "name": "miniphp",
+    "name": "down/miniphp",
+    
     "description": "simple php framework",
     "type": "framework",
     "keywords": ["php","miniphp"],
