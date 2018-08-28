@@ -1,0 +1,11 @@
+<?php 
+//线上模式的时候
+return array(
+    'debug' => false,
+
+    'db' => array(
+        'username' => 'root',
+        'password' => 'toor',
+        'database' => ''
+    ),
+);

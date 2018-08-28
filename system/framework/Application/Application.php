@@ -142,6 +142,7 @@ class App {
 
     /**
      * 执行应用
+     * 
      * @param  array $dispatch 调度信息
      * @param  array $config   配置信息
      * @return  mixed
