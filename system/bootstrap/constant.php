@@ -4,8 +4,6 @@ define('EXT', '.php');
 
 defined('CONF_EXT') or define('CONF_EXT','.php');
 
-define('SP', DIRECTORY_SEPARATOR);
-
 defined('ROOT_PATH') or define('ROOT_PATH', dirname(dirname(__DIR__)) . SP);
 
 defined('SYSTEM_PATH') or define('SYSTEM_PATH', dirname(__DIR__). SP );
