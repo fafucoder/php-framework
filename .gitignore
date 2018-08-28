@@ -9,12 +9,14 @@ application/logs/*
 !application/logs/.htaccess
 
 composer.lock
+readme.md
 
 /vendor/
 # IDE Files
 #-------------------------
 /nbproject/
 .idea/*
+.phpintel/*
 
 ## Sublime Text cache files
 *.tmlanguage.cache
@@ -22,3 +24,4 @@ composer.lock
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
+
