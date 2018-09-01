@@ -1,7 +1,7 @@
 <?php
 namespace System\Core;
 
-abstract class Single {
+abstract class Singleton {
     /**
      * @var array
      */
