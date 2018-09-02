@@ -306,7 +306,72 @@ class Loader {
      * @return string|null
      */
     public function getFilePath($class) {
+        if (array_key_exists($class, $this->loaded)) {
+            if ($this->fileExists($this->loaded[$class])) {
+                return $this->loaded[$class];     
+            }        
+        }
 
+        if (array_key_exists($class, $this->classes)) {
+            if ($this->fileExists($this->classes[$class])) {
+                return $this->classes[$class];
+            }
+        }
+
+        if (false !== strrpos($class, '\\')) {
+            foreach ($this->namespaces as $namespace => $dir) {
+                if (strpos($class, $namespace . '\\') === 0) {
+                    $file = rtrim($dir, '/\\') . str_replace("\\", DIRECTORY_SEPARATOR, substr($class, strlen($namespace))) . '.php';
+
+                    if ($this->fileExists($file)) {
+                        return $file;
+                    }
+                }
+            }
+        }
+
+        if (false !== strrpos($class, "\\")) {
+            foreach ($this->bundles as $namespace => $bundle) {
+                if (strpos($class, $namespace . '\\') === 0) {
+                    $name = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($namespace)));
+                    $path = preg_replace('/(?<=[a-z])([A-Z])/', '-$1', $name);
+
+                    $file = rtrim($dir, '/\\') . strtolower($path) . DIRECTORY_SEPARATOR . ($bundle['root'] ? $bundle['root'] : $name) . '.php';
+
+                    if ($this->fileExists($file)) {
+                        return $file;
+                    }
+                }
+            }
+        }
+
+        foreach ($this->prefixes as $prefix => $dir) {
+            //check if end in _ for prefix
+            if (substr($prefix, -1, 1) === '_') {
+                $prefix = substr($prefix, 0, strlen($prefix) - 1);
+            }
+            if (strpos($class, $prefix . '_') === 0) {
+                $file = rtrim($dir, '/\\') . str_replace('_', DIRECTORY_SEPARATOR, substr($class, strlen($prefix))) . '.php';
+
+                if ($this->fileExists($file)) {
+                    return $file;
+                }
+
+                $file = $dir . str_replace('_', '', substr($class, strlen($prefix) + 1)) . '.php';
+
+                if ($this->fileExists($file)) {
+                    return $file;
+                }
+            }
+        }
+
+        //check if class in extends directory
+        foreach ($this->extends as $dir) {
+            $file = $dir . $class . '.php';
+            if ($this->fileExists($file)) {
+                return $file;
+            }
+        }
     }
 
     /**
@@ -317,7 +382,8 @@ class Loader {
      */
     private function requireFile($file) {
         if ($this->fileExists($file)) {
-            $file = $this->getFilePath . $file;
+            $file = $this->includePath . $file;
+
             require_once $file;
             return true;
         }
