@@ -3,6 +3,7 @@ namespace Framework\Environment;
 
 use Framework\Config\Config;
 use Framework\Environment\Exception\PathNotFoundException;
+
 /**
  * Environment
  *
@@ -30,14 +31,14 @@ class Environment {
 	 * 
 	 * @var string
 	 */
-	public $env;
+	public $environment;
 
 	/**
 	 * Current environment data.
 	 * 
 	 * @var array
 	 */
-	public $data;
+	public $data = array();
 
 	/**
 	 * Construct.
@@ -52,12 +53,22 @@ class Environment {
 		$this->parser = $parser;
 	}
 
-	public function setEnv() {
-
+	/**
+	 * Set environment.
+	 * 
+	 * @param string $environment 
+	 */
+	public function setEnvironment($environment) {
+		$this->environment = $environment;
 	}
 
-	public function getEnv() {
-
+	/**
+	 * Get environment.
+	 * 
+	 * @return string
+	 */
+	public function getEnvironment() {
+		return $this->environment;
 	}
 
 	/**
@@ -66,22 +77,93 @@ class Environment {
 	 * @return array 
 	 */
 	public function load() {
-		return $this->getDate();
+		if ($this->path) {
+			$this->data = Config::parse($this->path);
+
+			//set env
+			foreach ($this->data as $key => $value) {
+				if (is_string($value)) {
+					putenv("$key=$value");
+				}
+
+				//if is array set $key_$k type
+				if (is_array($value)) {
+					foreach ($value as $k => $v) {
+						putenv("$key_$k=$v");
+					}
+				}
+			}
+		}
 	}
 
 	/**
-	 * Reload environment config data.
+	 * Get environment variable.
 	 * 
-	 * @return array
+	 * @param  string $name    variable name
+	 * @param  string $default default value
+	 * @return mixed
 	 */
-	public function reload() {
-		return $this->getData(false);
-	}
+	public function getVar($name, $default = null) {
+		if (array_key_exists($name, $this->data)) {
+			return $this->data[$name];
+		}
 
-	public function getData() {
+		$name = str_replace(".", "_", $name);
+		if (array_key_exists($name, $_ENV)) {
+			return $_ENV[$name];
+		} elseif (array_key_exists($name, $_SERVER)) {
+			return $_SERVER[$name];
+		}
 
+		$value = getenv($name);
+		if ($value) {
+			return $value;
+		}
+
+		return $default;
 	}
 	
+	/**
+	 * Set environment variable.
+	 * 
+	 * @param string $name variable name 
+	 * @param mixed $value variable value
+	 */
+	public function setVar($name, $value = null) {
+		if (!is_array($name)) {
+			$this->setEnvironmentVariable($name, $value);
+		}
+
+		foreach ($name as $key => $val) {
+			if (is_array($val)) {
+				foreach ($val as $k => $v) {
+					$name = $key . '_' . $k;
+					$this->setEnvironmentVariable($name, $v);
+				}
+			} else {
+				$this->setEnvironmentVariable($key, $val);
+			}
+		}
+	}
+
+	/**
+	 * Remove environment variable.
+	 * 
+	 * @param  string $name variable name
+	 * @return void       
+	 */
+	public function removeVar($name) {
+		if (array_key_exists($name, $this->data)) {
+			unset($this->data[$name]);
+		}
+
+		$name = str_replace(".", "_", $name);
+		if (function_exists('putenv')) {
+			putenv($name);
+		}
+		unset($_ENV[$name], $_SERVER[$name]);
+	}
+
 	/**
 	 * Get environment file path.
 	 * 
@@ -111,5 +193,24 @@ class Environment {
 		}
 
 		throw new PathNotFoundException(sprinf('path %s not exists!', $path));
+	}
+
+	/**
+	 * Set environment variable.
+	 * 
+	 * @param string $name
+	 * @param mixed $value 
+	 */
+	protected function setEnvironmentVariable($name, $value) {
+        if (function_exists('apache_getenv') && function_exists('apache_setenv')) {
+            apache_setenv($name, $value);
+        }
+
+        if (function_exists('putenv')) {
+            putenv("$name=$value");
+        }
+
+        $_ENV[$name] = $value;
+        $_SERVER[$name] = $value;
 	}
 }

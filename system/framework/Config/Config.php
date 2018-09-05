@@ -53,7 +53,7 @@ class Config extends AbstractConfig  {
 
 		$this->path = $this->getPath($path);
 		foreach ($this->path as $path) {
-			$data = array_merge($data, (array) $this->parse($path, $extension));
+			$data = array_merge($data, (array) self::parse($path, $extension));
 		}
 
 		parent::__construct($data);
@@ -85,7 +85,7 @@ class Config extends AbstractConfig  {
 	 * 
 	 * @return array
 	 */
-	public function parse($file, $parse = '') {
+	public static function parse($file, $parse = '') {
 		if (empty($parse)) {
 			$parse = pathinfo($file, PATHINFO_EXTENSION);
 		}
