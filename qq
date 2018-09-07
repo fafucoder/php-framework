@@ -1,0 +1,296 @@
+[33mcommit bb70e8c0fd490353272d8e2a43c8e935402d57c0[m
+Author: dawn <1960754013@qq.com>
+Date:   Wed Sep 5 23:50:21 2018 +0800
+
+    validate class code
+
+[33mcommit d3762b07c3ef5162b4de470a868445bfa209e74a[m
+Author: dawn <1960754013@qq.com>
+Date:   Wed Sep 5 22:39:34 2018 +0800
+
+    environment class code
+
+[33mcommit f31841efa719eb9ea2d706f145e0774bc80f7740[m
+Author: dawn <1960754013@qq.com>
+Date:   Wed Sep 5 08:37:56 2018 +0800
+
+    environment
+
+[33mcommit fa09a871ce5e12ca84292fa9900e402e2664bb18[m
+Author: dawn <1960754013@qq.com>
+Date:   Mon Sep 3 23:39:40 2018 +0800
+
+    environment
+
+[33mcommit 4800db3b08d969005af130570955d549e7212f20[m
+Author: dawn <1960754013@qq.com>
+Date:   Sun Sep 2 22:38:16 2018 +0800
+
+    config adapter
+
+[33mcommit b945a21366a0e38229e00767ab93da33a0f9cc8f[m
+Author: dawn <1960754013@qq.com>
+Date:   Sun Sep 2 22:21:02 2018 +0800
+
+    config class
+
+[33mcommit 5b8020a2db3fc3c9dc4670dd9b63f1d4d59d9cc2[m
+Author: dawn <1960754013@qq.com>
+Date:   Sun Sep 2 15:39:48 2018 +0800
+
+    tests boostrap
+
+[33mcommit 6c8ec270c2c477c2621d337a05f72e33dd5fdc85[m
+Author: dawn <1960754013@qq.com>
+Date:   Sun Sep 2 10:47:49 2018 +0800
+
+    php autoload
+
+[33mcommit 2214bd3e6c5680cffba2a3d9265224fc19a5f86f[m
+Author: dawn <1960754013@qq.com>
+Date:   Sun Sep 2 00:51:34 2018 +0800
+
+    loader update
+
+[33mcommit 8d6778e4930b7868bbd54f4b0409244bb6738ea3[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Aug 28 19:44:29 2018 +0800
+
+    autoload
+
+[33mcommit 0b55b6cc81fb7b81d5dfebb4f7e3a26befc4b7e2[m
+Merge: ca0269a df60f01
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Aug 28 19:12:33 2018 +0800
+
+    Merge branch 'master' of github.com:fafucoder/php-framework
+
+[33mcommit ca0269ab99d7b8f91f9ad036d44d6d68d76a7769[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Aug 28 19:12:23 2018 +0800
+
+    git ignore
+
+[33mcommit df60f016b2bb66ebba197d4ef631fbe0cca90cb2[m
+Author: dawn <1960754013@qq.com>
+Date:   Tue Aug 28 19:10:42 2018 +0800
+
+    Delete readme.md
+
+[33mcommit 8a3773b77407e707a5e146bdc9e9b0332b579cf0[m
+Merge: 53f7b98 81edf11
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Aug 28 18:58:07 2018 +0800
+
+    Merge branch 'master' of https://github.com/fafucoder/php-framework
+
+[33mcommit 53f7b980759f54e17f47f1ce023ac9b72179e056[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Aug 28 18:55:28 2018 +0800
+
+    git attributes
+
+[33mcommit 81edf11bf168649d0adc0256d0aefe150cec069c[m
+Author: dawn <1960754013@qq.com>
+Date:   Tue Aug 28 18:49:07 2018 +0800
+
+    Initial commit
+
+[33mcommit 0a9c81920ebeb8258097c68d6f53aa5846f8f04c[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Aug 28 18:44:26 2018 +0800
+
+    directory adjust
+
+[33mcommit 4b12ec5b8c24ccd17a3cb12eaa6872659aa1ff9b[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Mon May 28 14:31:47 2018 +0800
+
+    composer
+
+[33mcommit 8a81a496532ebdeb0af17e4b60760b81e42ff7ad[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Thu May 24 12:05:56 2018 +0800
+
+    framework core code
+
+[33mcommit 13245198496ca728dd67b4b920b262303c8c47ff[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Thu May 24 11:57:52 2018 +0800
+
+    new framework
+
+[33mcommit 0ddfd35c5c7ca6b86afe33924372e17b52d45cc1[m
+Author: down <1960754013@qq.com>
+Date:   Thu May 10 01:44:55 2018 +0800
+
+    config fixed
+
+[33mcommit 540267a2d07d7a56811408956c3df4bd3b5402a9[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Wed May 9 17:15:36 2018 +0800
+
+    fixed ajax but not finish
+
+[33mcommit 7751faeb920bd5233758009142f3a3dc1d39604e[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue May 8 18:53:44 2018 +0800
+
+    login
+
+[33mcommit bbf1038b05a35d0bf8c015b16c03e5d7a16c7d8c[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue May 8 14:22:59 2018 +0800
+
+    detail
+
+[33mcommit 6544176780a1c2e665defef6c712b954177788ec[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue May 8 12:39:08 2018 +0800
+
+    application
+
+[33mcommit 7e12c8564954b52d4124c8b7920a98f21a5f045c[m
+Author: down <1960754013@qq.com>
+Date:   Sun May 6 23:00:20 2018 +0800
+
+    shop index
+
+[33mcommit f7c9381dc0b67157d441f4e735565e7310a06845[m
+Author: down <1960754013@qq.com>
+Date:   Sun May 6 17:09:33 2018 +0800
+
+    framework finish
+
+[33mcommit 856c41f7679be5d29da534085cd08895049c9807[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Wed Apr 18 14:39:17 2018 +0800
+
+    application
+
+[33mcommit 55724f433a6538c3f8046059b8137aafa0336815[m
+Author: down <1960754013@qq.com>
+Date:   Wed Apr 11 23:22:56 2018 +0800
+
+    response
+
+[33mcommit 905cea35e6ad8dd551759b43e17a48195a61178d[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Wed Apr 11 18:20:19 2018 +0800
+
+    route and request 20180411
+
+[33mcommit 78a3f47b0fafeb937d3d15f90ac8630745ac73aa[m
+Author: down <1960754013@qq.com>
+Date:   Wed Apr 11 00:09:50 2018 +0800
+
+    route and request
+
+[33mcommit ae604b527629908e2c13c72ab97e512932df89fd[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Apr 10 16:53:50 2018 +0800
+
+    model finish 20180410
+
+[33mcommit fa0a68964076fde858eb6f637326d082180ea8d7[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Tue Apr 10 16:13:46 2018 +0800
+
+    20180410
+
+[33mcommit 9070cedf760915de77a06edcb64f2e58d86bf29e[m
+Author: linrc <linrc@amazingsurge.com>
+Date:   Mon Apr 9 18:38:33 2018 +0800
+
+    view 20180409
+
+[33mcommit a9ca3d28ab3e97dabc9ba201f7b36b25afb194ff[m
+Author: down <1960754013@qq.com>
+Date:   Sun Apr 8 22:54:09 2018 +0800
+
+    20180408
+
+[33mcommit 1b060874d54fa3b7532e738b93dd70d5d836d28b[m
+Merge: c897504 9de6c76
+Author: down <1960754013@qq.com>
+Date:   Wed Apr 4 23:04:12 2018 +0800
+
+    Merge branch 'master' of 119.29.27.177:/home/code/miniphp
+
+[33mcommit c897504e4a525e7359b16b50494598bf9b038321[m
+Author: down <1960754013@qq.com>
+Date:   Wed Apr 4 23:03:54 2018 +0800
+
+    i do nothing
+
+[33mcommit 9de6c767597ea3d1e1036af60e64fbdbd756c17b[m
+Author: down <1960754013@qq.com>
+Date:   Wed Apr 4 19:36:07 2018 +0800
+
+    20180404
+
+[33mcommit 6d6c341a37239cc14538e3de351eaf8d0c0a4213[m
+Author: down <1960754013@qq.com>
+Date:   Fri Mar 30 18:10:41 2018 +0800
+
+    20180330
+
+[33mcommit 3dc4c9220f637330210105b8d07c54c15ff3f693[m
+Author: down <1960754013@qq.com>
+Date:   Sat Mar 24 17:29:03 2018 +0800
+
+     20180324
+
+[33mcommit e233502b20a2dd2f94d19dfe6b416eb31e547f14[m
+Author: down <1960754013@qq.com>
+Date:   Wed Mar 21 21:15:50 2018 +0800
+
+    config
+
+[33mcommit 8ed6a7708d65973b52ba488dfac59b9da5686b75[m
+Author: down <1960754013@qq.com>
+Date:   Sun Mar 18 23:13:53 2018 +0800
+
+    20180318 23:00
+
+[33mcommit c47ce74cca9f7ef9dea2184b8d4f3ddc0483f086[m
+Author: down <1960754013@qq.com>
+Date:   Sun Mar 18 10:06:39 2018 +0800
+
+    autoload
+
+[33mcommit 4d3584190087b227d199ec4b6cfe83ffd97cf0a0[m
+Author: down <1960754013@qq.com>
+Date:   Thu Mar 15 18:10:59 2018 +0800
+
+    chaoxi
+
+[33mcommit cac2db2d5bfdf528242bcbd015164030f64264c2[m
+Author: down <1960754013@qq.com>
+Date:   Fri Dec 1 10:01:48 2017 +0800
+
+    2017-12-1 10:00
+
+[33mcommit 59817faeb3807a8cadfdb4bda0a1472235762a41[m
+Author: down <1960754013@qq.com>
+Date:   Thu Nov 30 17:38:29 2017 +0800
+
+    2017-11-30 17:50
+
+[33mcommit dfc1acc97bee9660734f78f6b420fd6078fa0918[m
+Author: down <1960754013@qq.com>
+Date:   Thu Nov 30 16:36:05 2017 +0800
+
+    2017-11-30 16:00
+
+[33mcommit 5ff3bc0bcb755f6768b36d7f7aedc7994661cc99[m
+Author: down <1960754013@qq.com>
+Date:   Wed Nov 29 23:48:58 2017 +0800
+
+    2017-11-29 22:22
+
+[33mcommit 20a35f81bc6164aa0453c58087bd2a51aac22980[m
+Author: down <1960754013@qq.com>
+Date:   Wed Nov 29 17:46:40 2017 +0800
+
+    2017-11-29 17:50
