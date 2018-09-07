@@ -1,7 +1,7 @@
 <?php
-namespace Framework\Validate;
+namespace Framework\Validation;
 
-class Validate {
+class Validate extends Factory {
 
 	/**
 	 * The default messages.
@@ -106,21 +106,88 @@ class Validate {
 	 * Validate fileds rule.
 	 * 
 	 * @param  array $data    
-	 * @param  array  $options 
+	 * @param  array  $rules
 	 * @return mixed          
 	 */
-	public function validate($data, $options = array()) {
+	public function validate($data, $rules = array()) {
+		if (empty($rules)) {
+			$rules = $this->rules;
+		}
+
+		foreach ($rules as $key => $fieldRules) {
+			$value = static::getDataValueByKey($data, $key);
+			$result = $this->checkField($key, $value, $fieldRules);
+		}
+	}
+
+	/**
+	 * Get the data value by key.
+	 * 
+	 * @param  array $data  data
+	 * @param  string $key  data key
+	 * @return mixed
+	 */
+	public static function getDataValueByKey($data, $key) {
+		if (array_key_exists($key, $data)) {
+			return $data[$key];
+		}
+		return null;
+	}
+
+	/**
+	 * Validate field.
+	 * 
+	 * @param  string $field      field name
+	 * @param  mixed $value       field value
+	 * @param  array $fieldRules  field rule
+	 * @return mixed             
+	 */
+	public function checkField($field, $value, $fieldRules) {
+		if (is_string($fieldRules)) {
+			$rule = $fieldRules;
+			$params = array();
+			$result = $this->checkRule($field, $value, $rule, $params);
+		} elseif (is_array($fieldRules)) {
+			foreach ($fieldRules as $rules => $params) {
+				if (is_numeric($rules)) {
+					$rules = explode("|", $params);
+					$params = array();
+					foreach ($rules as $rule) {
+						$result = $this->checkRule($field, $value, $rule, $params);
+					}
+				}
+
+				$result = $this->checkRule($field, $value, $rule, $params);
+			}
+		}
 
 	}
 
 	/**
-	 * __callStatic magic function.
+	 * Check the field rule is valid.
 	 * 
-	 * @param  string $method  $method name
-	 * @param  mixed $args   method arguments
-	 * @return mixed
+	 * @param  string $field  field name
+	 * @param  mixed $value  field value
+	 * @param  string $rule   rule name
+	 * @param  mixed $params field params
+	 * 
+	 * @return  mixed
 	 */
-	public function __callStatic($method, $args) {
+	public function checkRule($field, $value, $rule, $params) {
+		if ($params instanceof \Closure) {
+			$result = call_user_func_array($params, array($field, $value));
+		} else {
+			$result = call_user_func_array(__CLASS__ . :: . $rules, array($value, $params, $field));
+		}
 
+		if (false === $result) {
+			$message = $this->getRuleErrorMessage($field, $rule, $params);
+
+			if (null !== $message) {
+				$this->errors[$field][$rule] = $message;
+			}
+		}
+
+		return $result;
 	}
 }

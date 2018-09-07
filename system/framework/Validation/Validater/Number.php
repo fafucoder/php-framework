@@ -9,7 +9,7 @@ class Number extends ValidaterInterface {
 	 * @param  mixed  $options validate options
 	 * @return boolean
 	 */
-	public function validate($value, $options = array()) {
+	static public function validate($value, $options = array()) {
 
 	}
 
@@ -18,7 +18,7 @@ class Number extends ValidaterInterface {
 	 * 
 	 * @return string 
 	 */
-	public function errors($value, $options = array()) {
+	static public function errors($value, $options = array()) {
 		
 	}
 }
