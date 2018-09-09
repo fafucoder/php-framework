@@ -8,14 +8,14 @@ class Validate extends Factory {
 	 * 
 	 * @var array
 	 */
-	public static $messages = array();
+	public $messages = array();
 
 	/**
 	 * fields error information.
 	 * 
 	 * @var array
 	 */
-	public static $errors = array();
+	public $errors = array();
 
 	/**
 	 * Validate fields.
@@ -49,11 +49,11 @@ class Validate extends Factory {
 	 * Construct.
 	 * 
 	 * @param array $rules
-	 * @param array $customMessages
+	 * @param array $messages
 	 */
-	public function __construct(array $rules = array(), array $customMessages = array()) {
+	public function __construct(array $rules = array(), array $messages = array()) {
 		$this->rules = array_merge($this->rules, $rules);
-		static::$customMessages = array_merge(static::$customMessages, $customMessages);
+		$this->messages = array_merge($this->messages, $messages);
 	}
 
 	/**
@@ -114,9 +114,13 @@ class Validate extends Factory {
 			$rules = $this->rules;
 		}
 
-		foreach ($rules as $key => $fieldRules) {
-			$value = static::getDataValueByKey($data, $key);
-			$result = $this->checkField($key, $value, $fieldRules);
+		foreach ($rules as $field => $fieldRules) {
+			$value = $this->getFieldDataValue($data, $field);
+			$result = $this->checkField($field, $value, $fieldRules);
+
+			if (true !== $result) {
+				$this->errors
+			}
 		}
 	}
 
@@ -124,12 +128,12 @@ class Validate extends Factory {
 	 * Get the data value by key.
 	 * 
 	 * @param  array $data  data
-	 * @param  string $key  data key
+	 * @param  string $field  data key
 	 * @return mixed
 	 */
-	public static function getDataValueByKey($data, $key) {
-		if (array_key_exists($key, $data)) {
-			return $data[$key];
+	public function getFieldDataValue($data, $field) {
+		if (array_key_exists($field, $data)) {
+			return $data[$field];
 		}
 		return null;
 	}
@@ -144,23 +148,42 @@ class Validate extends Factory {
 	 */
 	public function checkField($field, $value, $fieldRules) {
 		if (is_string($fieldRules)) {
-			$rule = $fieldRules;
-			$params = array();
-			$result = $this->checkRule($field, $value, $rule, $params);
-		} elseif (is_array($fieldRules)) {
-			foreach ($fieldRules as $rules => $params) {
-				if (is_numeric($rules)) {
-					$rules = explode("|", $params);
-					$params = array();
-					foreach ($rules as $rule) {
-						$result = $this->checkRule($field, $value, $rule, $params);
-					}
-				}
-
-				$result = $this->checkRule($field, $value, $rule, $params);
-			}
+			$fieldRules = (array) $fieldRules;
 		}
 
+		if (array_key_exists($field, $this->appends)) {
+			$fieldRules = array_merge($fieldRules, $this->appends[$fields]);
+		}
+
+		foreach ($fieldRules as $rules => $params) {
+			if (is_numeric($rules)) {
+				$fieldRules = explode("|", $fieldRules);
+
+				foreach ($fieldRules as $key => $rule) {
+					if (false !== strpos($rule, "(")) {
+						list($rule, $params) = explode("(", rtrim($rule, ")"));
+						$params = explode(",", $params);
+					} else {
+						$params = array();
+					}
+
+					//if in remove rules continue
+					if (array_key_exists($field, $this->removes) && in_array($rule, $this->removes[$field])) {
+						continue;
+					}
+
+					$result = $this->checkRule($field, $value, $rule, $params);
+				}
+			}
+
+			//if in remove rules continue
+			if (array_key_exists($field, $this->removes) && in_array($rule, $this->removes[$field])) {
+				continue;
+			}
+			$result = $this->checkRule($field, $value, $rule, $params);
+		}
+
+		return isset($this->errors[$field]) && !empty($this->errors[$field]) ? $this->errors[$field] : true;
 	}
 
 	/**
@@ -177,11 +200,12 @@ class Validate extends Factory {
 		if ($params instanceof \Closure) {
 			$result = call_user_func_array($params, array($field, $value));
 		} else {
-			$result = call_user_func_array(__CLASS__ . :: . $rules, array($value, $params, $field));
+
+			$result = $this->validateRule($field, $value, $rule, $params);
 		}
 
 		if (false === $result) {
-			$message = $this->getRuleErrorMessage($field, $rule, $params);
+			$message = $this->getErrorMessage($field, $rule, $params);
 
 			if (null !== $message) {
 				$this->errors[$field][$rule] = $message;
@@ -189,5 +213,21 @@ class Validate extends Factory {
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Get error messages.
+	 * 
+	 * @param  string $field   field name
+	 * @param  string $rule    rule 
+	 * @param  array  $params  filed params
+	 * @return string|null
+	 */
+	public function getErrorMessage($field, $rule, $params) {
+		if (isset($this->messages[$field][$rule])) {
+			return $this->messages[$field][$rule];
+		}
+
+		return $this->getErrors($field, $rule, $params);
 	}
 }

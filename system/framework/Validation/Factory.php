@@ -2,6 +2,7 @@
 namespace Framework\Validation;
 
 use Framework\Validation\Validater\ValidaterInterface;
+use Framework\Validation\Exceptions\ValidaterNotFoundException;
 
 class Factory {
 	/**
@@ -30,7 +31,7 @@ class Factory {
 	 * 
 	 * @var array
 	 */
-	protected static $alias = array();
+	public static $alias = array();
 
 	/**
 	 * Register custom validater.
@@ -66,15 +67,72 @@ class Factory {
 	}
 
 	/**
+	 * Register validater alias.
+	 * 
+	 * @param  string|array $validater  validater name
+	 * @param  string $alias     alias name
+	 * @return void
+	 */
+	public function registerValidateAlias($validater, $alias) {
+		if (is_array($validater)) {
+			static::$alias = array_merge(static::$alias, $validater);
+		} else {
+			static::$alias[$validater] = $alias;
+		}
+	}
+
+	/**
+	 * Set validater prefix.
+	 * 
+	 * @param string $prefix 
+	 */
+	public function setValidaterPrefix($prefix) {
+		$this->validatePrefixs = $prefix;
+	}
+
+	/**
+	 * Get validater prefix.
+	 * 
+	 * @return string 
+	 */
+	public function getValidaterPrefix() {
+		return $this->validatePrefixs;
+	}
+
+	/**
+	 * Validate filed rule.
+	 * 
+	 * @param  string $field  field name
+	 * @param  mixed $value  field value
+	 * @param  string $rule   rule name
+	 * @param  mixed $params field params
+	 * 
+	 * @return mixed         
+	 */
+	public function validateRule($field, $value, $rule, $params) {
+		if (array_key_exists($rule, static::$alias)) {
+			$rule = static::$alias[$rule];
+		}
+		
+		if ($validater = $this->checkValidater($rule)) {
+			return $validater::validate($value, $params);
+		}
+
+		throw new ValidaterNotFoundException(sprintf("Rule %s not found for %s!"), $rule, $field);
+	}
+
+	/**
 	 * Get field error message.
 	 * 
 	 * @param  string $field  field name
-	 * @param  mixed $value  filed value.
 	 * @param  array  $params params
+	 * 
 	 * @return mixed may be is string or null      
 	 */
-	public function getErrorMessage($field, $value, $params = array()) {
-
+	public function getErrors($field, $rule, $params = array()) {
+		if ($validater = $this->checkValidater($field)) {
+			return $validater::errors($field, $params);
+		}
 	}
 
 	/**
@@ -82,6 +140,7 @@ class Factory {
 	 * 
 	 * @param  string $method method name
 	 * @param  array $params method params.
+	 * 
 	 * @return mixed         
 	 */
 	public function __callStatic($method, $params) {
@@ -101,6 +160,7 @@ class Factory {
 	 * 
 	 * @param  string $method method name 
 	 * @param  array $params  method param
+	 * 
 	 * @return mixed
 	 */
 	public function __call($method, $params) {
@@ -118,6 +178,7 @@ class Factory {
 
 	/**
 	 * Check validater class exists.
+	 * 
 	 * @param  string $method
 	 * 
 	 * @return string|false if calss exist return class or retunr false

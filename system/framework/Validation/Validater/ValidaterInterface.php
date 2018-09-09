@@ -14,7 +14,9 @@ interface ValidaterInterface {
 	/**
 	 * Return error message.
 	 * 
-	 * @return string 
+	 * @param  string $field   field name
+	 * @param  array  $options field params
+	 * @return string | null          
 	 */
-	static public function errors($value, $options = array());
+	static public function errors($field, $options = array());
 }

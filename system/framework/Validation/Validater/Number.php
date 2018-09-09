@@ -10,15 +10,17 @@ class Number extends ValidaterInterface {
 	 * @return boolean
 	 */
 	static public function validate($value, $options = array()) {
-
+		return is_numeric($value);
 	}
 
 	/**
 	 * Return error message.
 	 * 
-	 * @return string 
+	 * @param  string $field   field name
+	 * @param  array  $options field params
+	 * @return string | null          
 	 */
-	static public function errors($value, $options = array()) {
-		
+	static public function errors($field, $options = array()) {
+		return sprintf("The %s is not number", $field);
 	}
 }
